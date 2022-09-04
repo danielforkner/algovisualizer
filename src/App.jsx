@@ -1,4 +1,5 @@
 import InsertionSort from "./InsertionSort";
+import SelectionSort from "./SelectionSort";
 
 const App = () => {
   return (
@@ -6,6 +7,7 @@ const App = () => {
       <button>Sort All</button>
       <button>Refresh All</button>
       <InsertionSort />
+      <SelectionSort />
     </div>
   );
 };

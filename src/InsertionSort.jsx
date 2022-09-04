@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import { wait, swap} from './helpers'
+import './insertionSort.css'
 
 const InsertionSort = () => {
     const [grid, setGrid] = useState([]);
@@ -12,7 +13,7 @@ const InsertionSort = () => {
       for (let i = 0; i < 10; i++) {
         arr.push(Math.floor(Math.random() * 100));
         setGrid([...arr]);
-        await wait(25);
+        await wait(40);
       }
     };
   
@@ -38,7 +39,7 @@ const InsertionSort = () => {
         select(i).classList.remove('pointer-i');
       }
       for (let i = 0; i < grid.length; i++) {
-        await wait(100);
+        await wait(40);
         select(i).classList.add('sorted');
       }
     };

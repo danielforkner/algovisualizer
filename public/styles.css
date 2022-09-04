@@ -9,15 +9,6 @@
 .grid-container {
     display: flex;
 }
-.selected-j {
-    background-color: chartreuse;
-}
-.selected-j-1 {
-    background-color: tomato;
-}
-.pointer-i {
-    background-color: yellow;
-}
 .sorted {
     background-color: aqua;
 }
