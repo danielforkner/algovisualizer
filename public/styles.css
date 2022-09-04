@@ -1,0 +1,32 @@
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+}
+.grid-container {
+    display: flex;
+}
+.selected-j {
+    background-color: chartreuse;
+}
+.selected-j-1 {
+    background-color: tomato;
+}
+.pointer-i {
+    background-color: yellow;
+}
+.sorted {
+    background-color: aqua;
+}
+.speedSlider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    background: #d4dffc; /* Grey background */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;  
+    border: 1px solid black
+}
