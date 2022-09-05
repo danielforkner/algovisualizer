@@ -1,5 +1,6 @@
 .cell {
     display: flex;
+    box-sizing: border-box;
     justify-content: center;
     align-items: center;
     width: 25px;
@@ -10,6 +11,9 @@
     display: flex;
 }
 .sorted {
+    border-bottom: 3px solid green
+}
+.complete {
     background-color: aqua;
 }
 .speedSlider {

@@ -1,11 +1,11 @@
 import {useState} from 'react'
-import { wait, swap} from './helpers'
-import './insertionSort.css'
+import { wait} from './helpers'
+import './bubbleSort.css'
 
-const InsertionSort = () => {
+const BubbleSort = () => {
     const [grid, setGrid] = useState([]);
     const [speed, setSpeed] = useState(500);
-    const select = (idx) => document.getElementById(`insertionsort:${idx}`);
+    const select = (idx) => document.getElementById(`bubblesort:${idx}`);
   
     const refresh = async () => {
       if (select(0)) select(0).className = 'cell'; // I don't know why grid[0] still has 'sorted' on the class after refresh
@@ -21,33 +21,40 @@ const InsertionSort = () => {
       refresh();
     }
   
+    const swap = (i, array) => {
+        let temp = array[i];
+        array[i] = array[i+1];
+        array[i+1] = temp;
+    }
+
     const sort = async () => {
-      for (let i = 0; i < grid.length; i++) {
-        select(i).classList.add('pointer-i');
-        let j = i;
-        while (j > 0 && grid[j] < grid[j - 1]) {
-          select(j).classList.add('selected-j');
-          await wait(speed);
-          swap(j, j - 1, grid);
-          setGrid([...grid]);
-          select(j).classList.remove('selected-j');
-          j--;
+        let unsorted = true;
+        let counter = 0;
+        while (unsorted) {
+            unsorted = false;
+            for (let i = 0; i < grid.length - 1 - counter; i++) {
+                select(i).classList.add('pointer');
+                await wait(speed);
+                if (grid[i] > grid[i+1]) {
+                    unsorted = true;
+                    swap(i, grid)
+                    setGrid([...grid])
+                }
+                select(i).classList.remove('pointer')
+            }
+            select(grid.length - 1 - counter).classList.add('sorted')
+            counter++
         }
-        select(j).classList.add('selected-j');
-        await wait(speed);
-        select(j).classList.remove('selected-j');
-        select(i).classList.remove('pointer-i');
-      }
-      for (let i = 0; i < grid.length; i++) {
-        await wait(40);
-        select(i).classList.add('complete');
-        select(i).classList.add('sorted');
-      }
+        for (let i = 0; i < grid.length; i++) {
+            await wait(40);
+            select(i).classList.add('complete');
+            select(i).classList.add('sorted');
+          }
     };
   
     return (
       <div>
-        <h1>Insertion Sort</h1>
+        <h1>Bubble Sort</h1>
         <div className="controls-container">
           <input
             type="range"
@@ -64,8 +71,8 @@ const InsertionSort = () => {
             return (
               <div
                 className="cell"
-                id={`insertionsort:${idx}`}
-                key={`insertionsort:${idx}`}
+                id={`bubblesort:${idx}`}
+                key={`bubblesort:${idx}`}
               >
                 {elem}
               </div>
@@ -78,4 +85,4 @@ const InsertionSort = () => {
     );
   };
 
-  export default InsertionSort
+  export default BubbleSort

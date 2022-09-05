@@ -21,6 +21,7 @@ const SelectionSort = () => {
                 };
                 select(j).classList.remove('pointer-j')
             }
+            select(i).classList.add('sorted')
             swap(i, min, grid)
             setGrid([...grid])
             await wait(speed)
@@ -29,12 +30,12 @@ const SelectionSort = () => {
         }
         for (let i = 0; i < grid.length; i++) {
             await wait(40);
-            select(i).classList.add('sorted');
+            select(i).classList.add('complete');
           }
     }
 
     const refresh = async () => {
-        select(0)?.classList.remove('sorted'); // I don't know why grid[0] still has 'sorted' on the class after refresh
+      if (select(0)) select(0).className = 'cell'; // I don't know why grid[0] still has 'sorted' on the class after refresh
         let arr = [];
         for (let i = 0; i < 10; i++) {
           arr.push(Math.floor(Math.random() * 100));
