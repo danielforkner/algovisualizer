@@ -1,15 +1,65 @@
 import InsertionSort from "./InsertionSort";
 import SelectionSort from "./SelectionSort";
 import BubbleSort from './BubbleSort'
+import { useState } from "react";
+import { wait } from "./helpers";
 
 const App = () => {
+  const [grid, setGrid] = useState([])
+  const [speed, setSpeed] = useState(500);
+  const [sorting, setSorting] = useState(false)
+
+  const refresh = async () => {
+      let arr = [];
+      for (let i = 0; i < 10; i++) {
+        arr.push(Math.floor(Math.random() * 100));
+        setGrid([...arr]);
+        await wait(40);
+      }
+    };
+  
+    if (!grid.length) {
+      refresh();
+    }
+
+    const handleSort = async () => {
+      setSorting(true);
+      await wait(50)
+      setSorting(false);
+    }
+
   return (
     <div>
-      <button>Sort All</button>
-      <button>Refresh All</button>
-      <InsertionSort />
-      <SelectionSort />
-      <BubbleSort />
+      <div className="controls-container">
+          <input
+            type="range"
+            min="75"
+            max="1000"
+            style={{ direction: 'rtl' }}
+            value={speed}
+            className="speedSlider"
+            onChange={(e) => setSpeed(e.target.value)}
+          />
+        </div>
+        <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
+      <button onClick={handleSort}>Sort All</button>
+      <button onClick={refresh}>Refresh</button>
+      <div className="grid-container">
+          {grid.map((elem, idx) => {
+            return (
+              <div
+                className="cell"
+                id={`sortingGrid:${idx}`}
+                key={`sortingGrid:${idx}`}
+              >
+                {elem}
+              </div>
+            );
+          })}
+        </div>
+      <InsertionSort mainGrid={grid} speed={speed} sorting={sorting}/>
+      <SelectionSort mainGrid={grid} speed={speed} sorting={sorting}/>
+      <BubbleSort mainGrid={grid} speed={speed} sorting={sorting}/>
     </div>
   );
 };

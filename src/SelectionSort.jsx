@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { wait, swap } from './helpers'
 import './selectionSort.css'
 
-const SelectionSort = () => {
-    const [grid, setGrid] = useState([])
-    const [speed, setSpeed] = useState(500)
+const SelectionSort = ({mainGrid, speed, sorting}) => {
+    const [grid, setGrid] = useState(mainGrid)
     const select = (idx) => document.getElementById(`selectionsort:${idx}`);
 
     const sort = async () => {
@@ -34,34 +33,17 @@ const SelectionSort = () => {
           }
     }
 
-    const refresh = async () => {
-      if (select(0)) select(0).className = 'cell'; // I don't know why grid[0] still has 'sorted' on the class after refresh
-        let arr = [];
-        for (let i = 0; i < 10; i++) {
-          arr.push(Math.floor(Math.random() * 100));
-          setGrid([...arr]);
-          await wait(40);
-        }
-      };
-    
-      if (!grid.length) {
-        refresh();
-      }
+    useEffect(() => {
+      setGrid([...mainGrid])
+    }, [mainGrid])
+
+    useEffect(() => {
+      if (sorting) sort()
+    }, [sorting])
 
     return (
         <div>
           <h1>Selection Sort</h1>
-          <div className="controls-container">
-            <input
-              type="range"
-              min="150"
-              max="1000"
-              style={{ direction: 'rtl' }}
-              value={speed}
-              className="speedSlider"
-              onChange={(e) => setSpeed(e.target.value)}
-            />
-          </div>
           <div className="grid-container">
             {grid.map((elem, idx) => {
               return (
@@ -75,8 +57,8 @@ const SelectionSort = () => {
               );
             })}
           </div>
-          <button onClick={sort}>Sort!</button>
-          <button onClick={refresh}>Refresh</button>
+          {/* <button onClick={sort}>Sort!</button> */}
+          {/* <button onClick={refresh}>Refresh</button> */}
         </div>
       );
 }

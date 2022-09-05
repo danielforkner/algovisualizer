@@ -1,33 +1,26 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { wait} from './helpers'
 import './bubbleSort.css'
 
-const BubbleSort = () => {
-    const [grid, setGrid] = useState([]);
-    const [speed, setSpeed] = useState(500);
+const BubbleSort = ({mainGrid, speed, sorting}) => {
+    const [grid, setGrid] = useState(mainGrid);
     const select = (idx) => document.getElementById(`bubblesort:${idx}`);
   
-    const refresh = async () => {
-      if (select(0)) select(0).className = 'cell'; // I don't know why grid[0] still has 'sorted' on the class after refresh
-      let arr = [];
-      for (let i = 0; i < 10; i++) {
-        arr.push(Math.floor(Math.random() * 100));
-        setGrid([...arr]);
-        await wait(40);
-      }
-    };
-  
-    if (!grid.length) {
-      refresh();
-    }
-  
+    useEffect(() => {
+      setGrid([...mainGrid])
+    }, [mainGrid])
+
+    useEffect(() => {
+      if (sorting) sort();
+    }, [sorting])
+
     const swap = (i, array) => {
         let temp = array[i];
         array[i] = array[i+1];
         array[i+1] = temp;
     }
 
-    const sort = async () => {
+    async function sort() {
         let unsorted = true;
         let counter = 0;
         while (unsorted) {
@@ -55,17 +48,6 @@ const BubbleSort = () => {
     return (
       <div>
         <h1>Bubble Sort</h1>
-        <div className="controls-container">
-          <input
-            type="range"
-            min="150"
-            max="1000"
-            style={{ direction: 'rtl' }}
-            value={speed}
-            className="speedSlider"
-            onChange={(e) => setSpeed(e.target.value)}
-          />
-        </div>
         <div className="grid-container">
           {grid.map((elem, idx) => {
             return (
@@ -79,8 +61,8 @@ const BubbleSort = () => {
             );
           })}
         </div>
-        <button onClick={sort}>Sort!</button>
-        <button onClick={refresh}>Refresh</button>
+        {/* <button onClick={sort}>Sort!</button> */}
+        {/* <button onClick={refresh}>Refresh</button> */}
       </div>
     );
   };

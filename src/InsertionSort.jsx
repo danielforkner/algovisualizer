@@ -1,27 +1,20 @@
-import {useState} from 'react'
+import { useEffect, useState} from 'react'
 import { wait, swap} from './helpers'
 import './insertionSort.css'
 
-const InsertionSort = () => {
-    const [grid, setGrid] = useState([]);
-    const [speed, setSpeed] = useState(500);
+const InsertionSort = ({mainGrid, speed, sorting}) => {
+    const [grid, setGrid] = useState(mainGrid);
     const select = (idx) => document.getElementById(`insertionsort:${idx}`);
+
+    useEffect(() => {
+      setGrid([...mainGrid])
+    }, [mainGrid])
+
+    useEffect(() => {
+      if (sorting) sort();
+    }, [sorting])
   
-    const refresh = async () => {
-      if (select(0)) select(0).className = 'cell'; // I don't know why grid[0] still has 'sorted' on the class after refresh
-      let arr = [];
-      for (let i = 0; i < 10; i++) {
-        arr.push(Math.floor(Math.random() * 100));
-        setGrid([...arr]);
-        await wait(40);
-      }
-    };
-  
-    if (!grid.length) {
-      refresh();
-    }
-  
-    const sort = async () => {
+    async function sort() {
       for (let i = 0; i < grid.length; i++) {
         select(i).classList.add('pointer-i');
         let j = i;
@@ -48,17 +41,6 @@ const InsertionSort = () => {
     return (
       <div>
         <h1>Insertion Sort</h1>
-        <div className="controls-container">
-          <input
-            type="range"
-            min="150"
-            max="1000"
-            style={{ direction: 'rtl' }}
-            value={speed}
-            className="speedSlider"
-            onChange={(e) => setSpeed(e.target.value)}
-          />
-        </div>
         <div className="grid-container">
           {grid.map((elem, idx) => {
             return (
@@ -72,8 +54,8 @@ const InsertionSort = () => {
             );
           })}
         </div>
-        <button onClick={sort}>Sort!</button>
-        <button onClick={refresh}>Refresh</button>
+        {/* <button onClick={sort}>Sort!</button> */}
+        {/* <button onClick={refresh}>Refresh</button> */}
       </div>
     );
   };
