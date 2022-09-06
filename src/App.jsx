@@ -1,7 +1,7 @@
 import InsertionSort from "./InsertionSort";
 import SelectionSort from "./SelectionSort";
 import BubbleSort from './BubbleSort'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { wait } from "./helpers";
 
 const App = () => {
@@ -12,15 +12,15 @@ const App = () => {
   const refresh = async () => {
       let arr = [];
       for (let i = 0; i < 10; i++) {
-        arr.push(Math.floor(Math.random() * 100));
         setGrid([...arr]);
+        arr.push(Math.floor(Math.random() * 100));
         await wait(40);
       }
     };
   
-    if (!grid.length) {
-      refresh();
-    }
+  useEffect(() => {
+    refresh();
+  }, [])
 
     const handleSort = async () => {
       setSorting(true);

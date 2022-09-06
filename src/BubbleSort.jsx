@@ -3,7 +3,7 @@ import { wait} from './helpers'
 import './bubbleSort.css'
 
 const BubbleSort = ({mainGrid, speed, sorting}) => {
-    const [grid, setGrid] = useState(mainGrid);
+    const [grid, setGrid] = useState([]);
     const select = (idx) => document.getElementById(`bubblesort:${idx}`);
   
     useEffect(() => {
@@ -28,14 +28,17 @@ const BubbleSort = ({mainGrid, speed, sorting}) => {
             for (let i = 0; i < grid.length - 1 - counter; i++) {
                 select(i).classList.add('pointer');
                 await wait(speed);
+                select(i-1)?.classList.remove('swap1')
                 if (grid[i] > grid[i+1]) {
                     unsorted = true;
+                    select(i).classList.add('swap1')
                     swap(i, grid)
                     setGrid([...grid])
                 }
                 select(i).classList.remove('pointer')
             }
             select(grid.length - 1 - counter).classList.add('sorted')
+            select(grid.length - 2 - counter)?.classList.remove('swap1')
             counter++
         }
         for (let i = 0; i < grid.length; i++) {
@@ -61,8 +64,6 @@ const BubbleSort = ({mainGrid, speed, sorting}) => {
             );
           })}
         </div>
-        {/* <button onClick={sort}>Sort!</button> */}
-        {/* <button onClick={refresh}>Refresh</button> */}
       </div>
     );
   };

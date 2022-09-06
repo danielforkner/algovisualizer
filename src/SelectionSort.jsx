@@ -3,7 +3,7 @@ import { wait, swap } from './helpers'
 import './selectionSort.css'
 
 const SelectionSort = ({mainGrid, speed, sorting}) => {
-    const [grid, setGrid] = useState(mainGrid)
+    const [grid, setGrid] = useState([])
     const select = (idx) => document.getElementById(`selectionsort:${idx}`);
 
     const sort = async () => {
