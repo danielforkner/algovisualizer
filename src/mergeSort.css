@@ -1,3 +1,11 @@
 .pointer {
     background-color: yellow;
+} .stack-container {
+    display: flex;
+    height: 25px;
+    justify-content: space-around;
+} .left {
+    background-color: rgb(251, 253, 109);
+} .right {
+    background-color: rgb(168, 251, 255);
 }
