@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { wait } from './helpers';
+import './mergeSort.css';
 
 const MergeSort = ({ mainGrid, speed, sorting }) => {
   const [grid, setGrid] = useState([]);
@@ -14,34 +15,85 @@ const MergeSort = ({ mainGrid, speed, sorting }) => {
     if (sorting) sort();
   }, [sorting]);
 
-  async function merge(left, right) {
-    let arr = [];
-    while (left.length && right.length) {
-      if (left[0] < right[0]) {
-        arr.push(left.shift());
-      } else {
-        arr.push(right.shift());
+  async function mergeSort(array, start, end) {
+    if (start < end) {
+      let mid = Math.floor((start + end) / 2);
+
+      // --------> for visualization purposes only
+      let leftLen = mid - start + 1;
+      let rightLen = end - mid;
+
+      let leftArr = [];
+      let rightArr = [];
+
+      for (let i = 0; i < leftLen; i++) {
+        leftArr[i] = array[start + i];
       }
+      for (let i = 0; i < rightLen; i++) {
+        rightArr[i] = array[mid + 1 + i];
+      }
+      setStack((stack) => [...stack, leftArr, rightArr]);
+      await wait(speed);
+      // <--------
+
+      await await mergeSort(array, start, mid);
+      await mergeSort(array, mid + 1, end);
+      await merge(array, start, mid, end);
     }
-    return [...arr, ...left, ...right];
+    return array;
   }
 
-  async function mergeSort(array) {
-    const mid = Math.floor(array.length / 2);
+  async function merge(array, start, mid, end) {
+    const localStack = [];
 
-    if (array.length === 1) {
-      return array;
+    let leftLen = mid - start + 1;
+    let rightLen = end - mid;
+
+    let leftArr = [];
+    let rightArr = [];
+
+    for (let i = 0; i < leftLen; i++) {
+      leftArr[i] = array[start + i];
+    }
+    for (let i = 0; i < rightLen; i++) {
+      rightArr[i] = array[mid + 1 + i];
     }
 
-    const left = array.splice(0, mid);
-    const sorted = await merge(await mergeSort(left), await mergeSort(array));
-    setGrid([...sorted]);
+    let leftIdx = 0;
+    let rightIdx = 0;
+    let pointer = start;
+
+    while (leftIdx < leftLen && rightIdx < rightLen) {
+      if (leftArr[leftIdx] <= rightArr[rightIdx]) {
+        array[pointer] = leftArr[leftIdx++];
+      } else {
+        array[pointer] = rightArr[rightIdx++];
+      }
+      pointer++;
+    }
+
+    while (leftIdx < leftLen) array[pointer++] = leftArr[leftIdx++];
+    while (rightIdx < rightLen) array[pointer++] = rightArr[rightIdx++];
+
+    // --------> for visualization purposes only
+    leftLen = mid - start + 1;
+    rightLen = end - mid;
+
+    leftArr = [];
+    rightArr = [];
+
+    for (let i = 0; i < leftLen; i++) {
+      leftArr[i] = array[start + i];
+    }
+    for (let i = 0; i < rightLen; i++) {
+      rightArr[i] = array[mid + 1 + i];
+    }
+    setStack((stack) => [...stack, [...leftArr, ...rightArr]]);
     await wait(speed);
-    return sorted;
+    // <--------
   }
   async function sort() {
-    const sorted = await mergeSort(grid);
-    setGrid([...sorted]);
+    await mergeSort([...grid], 0, grid.length - 1);
   }
 
   return (
@@ -60,6 +112,27 @@ const MergeSort = ({ mainGrid, speed, sorting }) => {
           );
         })}
       </div>
+      <h2>Stack</h2>
+      {!stack.length ? null : (
+        <>
+          {stack.map((elem, idx) => {
+            return (
+              <div
+                className="grid-container"
+                key={`mergeStackContainer:${idx}`}
+              >
+                {elem.map((num, i) => {
+                  return (
+                    <div className="cell" key={`mergesortStack:[${idx},${i}]`}>
+                      {num}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 };

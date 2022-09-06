@@ -1,30 +1,44 @@
-function merge(left, right) {
-  console.log('left and right: ', left, right);
-  let arr = [];
-  while (left.length && right.length) {
-    if (left[0] < right[0]) {
-      arr.push(left.shift());
+async function mergeSort(array, start, end) {
+  if (start < end) {
+    let mid = Math.floor((start + end) / 2);
+
+    await mergeSort(array, start, mid);
+    await mergeSort(array, mid + 1, end);
+
+    await merge(array, start, mid, end);
+  }
+  return array;
+}
+
+async function merge(array, start, mid, end) {
+  const localStack = [];
+
+  let leftLen = mid - start + 1;
+  let rightLen = end - mid;
+
+  let leftArr = [];
+  let rightArr = [];
+
+  for (let i = 0; i < leftLen; i++) {
+    leftArr[i] = array[start + i];
+  }
+  for (let i = 0; i < rightLen; i++) {
+    rightArr[i] = array[mid + 1 + i];
+  }
+
+  let leftIdx = 0;
+  let rightIdx = 0;
+  let pointer = start;
+
+  while (leftIdx < leftLen && rightIdx < rightLen) {
+    if (leftArr[leftIdx] <= rightArr[rightIdx]) {
+      array[pointer] = leftArr[leftIdx++];
     } else {
-      arr.push(right.shift());
+      array[pointer] = rightArr[rightIdx++];
     }
-  }
-  console.log('Final: ', [...arr, ...left, ...right]);
-  return [...arr, ...left, ...right];
-}
-
-function mergeSort(array) {
-  if (array.length <= 1) {
-    return array;
+    pointer++;
   }
 
-  const mid = Math.floor(array.length / 2);
-
-  const left = array.slice(0, mid);
-  const right = array.slice(mid);
-  console.log('left: ', left);
-  console.log('right: ', array);
-  const sorted = merge(mergeSort(left), mergeSort(array));
-  console.log('SORTED: ', sorted);
+  while (leftIdx < leftLen) array[pointer++] = leftArr[leftIdx++];
+  while (rightIdx < rightLen) array[pointer++] = rightArr[rightIdx++];
 }
-
-mergeSort([2, 7, 4, 1, 456, 21, 34, 62]);
