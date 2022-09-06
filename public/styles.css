@@ -1,6 +1,17 @@
 body {
     background-color: beige;
 }
+.container {
+    display: flex;
+}
+.vertical-container {
+    display: flex;
+    flex-direction: column;
+}
+#sidebar {
+    padding: 1rem;
+    gap: 1rem;
+}
 .cell {
     display: flex;
     box-sizing: border-box;
