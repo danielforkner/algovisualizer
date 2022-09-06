@@ -3,6 +3,7 @@ import SelectionSort from "./SelectionSort";
 import BubbleSort from './BubbleSort'
 import { useEffect, useState } from "react";
 import { wait } from "./helpers";
+import MergeSort from "./MergeSort";
 
 const App = () => {
   const [grid, setGrid] = useState([])
@@ -60,6 +61,7 @@ const App = () => {
       <InsertionSort mainGrid={grid} speed={speed} sorting={sorting}/>
       <SelectionSort mainGrid={grid} speed={speed} sorting={sorting}/>
       <BubbleSort mainGrid={grid} speed={speed} sorting={sorting}/>
+      <MergeSort mainGrid={grid} speed={speed} sorting={sorting} />
     </div>
   );
 };
