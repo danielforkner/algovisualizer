@@ -6,13 +6,20 @@ export default function BinaryTree() {
   const [canvasHeight, setCanvasHeight] = useState(500);
   const [speed, setSpeed] = useState(500);
   const [numNodes, setNumNodes] = useState(25);
-  const [c, setC] = useState();
-  const [ctx, setCtx] = useState();
+  const [c, setC] = useState(null);
+  const [ctx, setCtx] = useState(null);
+  const [values, setValues] = useState([]);
 
   useEffect(() => {
     setC(document.getElementById('canvas'));
-    if (c) setCtx(c.getContext('2d'));
-  }, [c]);
+    if (c) {
+      setCtx(c.getContext('2d'));
+    }
+    if (ctx) {
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'black';
+    }
+  }, [c, ctx]);
 
   class Node {
     constructor(data) {
@@ -31,12 +38,14 @@ export default function BinaryTree() {
     constructor() {
       this.root = null;
       this.rootX = 250; // starting position on canvas
-      this.rootY = 20; // starting position on canvas
-      this.nodeXOffset = 150; // how far apart nodes are X
+      this.rootY = 25; // starting position on canvas
+      this.nodeXOffset = 200; // how far apart nodes are X
       this.nodeYOffset = 60; // how far apart nodes are Y
-      this.levelIncrement = 0.75; // root is level 0
+      this.levelIncrement = 1; // root is level 0
       this.rootRadius = 20; // starting node size on canvas
     }
+    async depthFirstSearch() {}
+    async breadthFirstSearch() {}
     async insertRoot(value) {
       this.root = new Node({
         value,
@@ -46,9 +55,10 @@ export default function BinaryTree() {
       });
       ctx.beginPath();
       ctx.arc(this.root.x, this.root.y, this.rootRadius, 0, Math.PI * 2);
+      ctx.fill();
       ctx.stroke();
       ctx.closePath();
-      ctx.fillText(value, this.rootX, this.rootY);
+      ctx.strokeText(value, this.rootX, this.rootY);
       await wait(speed / 2);
     }
     async insertNode(value, parentNode, level = 0) {
@@ -62,7 +72,7 @@ export default function BinaryTree() {
           curr.right = new Node({
             value,
             x: curr.x + this.nodeXOffset / (1 + level),
-            y: curr.y + this.nodeYOffset,
+            y: curr.y + this.nodeYOffset - level * 3,
             radius: this.rootRadius - level,
           });
           // node
@@ -74,9 +84,10 @@ export default function BinaryTree() {
             0,
             Math.PI * 2
           );
+          ctx.fill();
           ctx.stroke();
           ctx.closePath();
-          ctx.fillText(value, curr.right.x, curr.right.y);
+          ctx.strokeText(value, curr.right.x, curr.right.y);
           // line
           ctx.beginPath();
           ctx.moveTo(curr.x, curr.y + curr.radius);
@@ -91,15 +102,16 @@ export default function BinaryTree() {
           curr.left = new Node({
             value,
             x: curr.x - this.nodeXOffset / (1 + level),
-            y: curr.y + this.nodeYOffset,
+            y: curr.y + this.nodeYOffset - level * 3,
             radius: this.rootRadius - level,
           });
           // node
           ctx.beginPath();
           ctx.arc(curr.left.x, curr.left.y, curr.left.radius, 0, Math.PI * 2);
+          ctx.fill();
           ctx.stroke();
           ctx.closePath();
-          ctx.fillText(value, curr.left.x, curr.left.y);
+          ctx.strokeText(value, curr.left.x, curr.left.y);
           // line
           ctx.beginPath();
           ctx.moveTo(curr.x, curr.y + curr.radius);
@@ -114,25 +126,38 @@ export default function BinaryTree() {
   }
 
   const handleClear = () => {
-    ctx.clearRect(0);
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   };
   const handleDraw = async () => {
     let tree = new BinaryTree();
-    tree.insertRoot(Math.floor(Math.random() * 100));
+    const root = Math.floor(Math.random() * 100);
+    tree.insertRoot(root);
+    setValues((values) => [root]);
     for (let i = 0; i < numNodes; i++) {
-      await tree.insertNode(Math.floor(Math.random() * 100));
+      const value = Math.floor(Math.random() * 100);
+      await tree.insertNode(value);
+      setValues((values) => [...values, value]);
     }
   };
   return (
     <div>
-      <h2>Binary Tree</h2>
-      <button onClick={handleDraw}>Draw</button>
+      <button onClick={handleDraw}>Generate a Tree</button>
       <button onClick={handleClear}>Clear</button>
+      <h2>Binary Tree</h2>
+      <div className="values">
+        {values.map((value, idx) => {
+          return (
+            <div className="cell" key={`binarytreevalue:${idx}`}>
+              {value}
+            </div>
+          );
+        })}
+      </div>
       <canvas
         id="canvas"
         width={canvasWidth}
         height={canvasHeight}
-        style={{ backgroundColor: 'white' }}
+        // style={{ backgroundColor: 'white' }}
       >
         Your browser does not support this content
       </canvas>
