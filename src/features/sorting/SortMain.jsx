@@ -1,32 +1,29 @@
-import { useEffect, useState } from 'react';
-import { wait } from '../helpers';
+import { useState } from 'react';
+import { wait } from './helpers';
 import InsertionSort from './InsertionSort';
 import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
+import { useDispatch, useSelector } from 'react-redux';
+import { refreshGrid, setSorting } from './sortingSlice';
 
 const SortMain = () => {
-  const [grid, setGrid] = useState([]);
+  const grid = useSelector((state) => state.sorting.grid);
+  const sorting = useSelector((state) => state.sorting.sorting);
+  const dispatch = useDispatch();
   const [speed, setSpeed] = useState(500);
-  const [sorting, setSorting] = useState(false);
 
   const refresh = async () => {
     let arr = [];
     for (let i = 0; i < 10; i++) {
-      setGrid([...arr]);
       arr.push(Math.floor(Math.random() * 100));
       await wait(40);
     }
+    dispatch(refreshGrid(arr));
   };
 
-  useEffect(() => {
-    refresh();
-  }, []);
-
   const handleSort = async () => {
-    setSorting(true);
-    await wait(50);
-    setSorting(false);
+    dispatch(setSorting(true));
   };
 
   return (
@@ -43,7 +40,7 @@ const SortMain = () => {
         />
       </div>
       <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
-      <button onClick={handleSort}>Sort All</button>
+      <button onClick={handleSort}>Start Sorting</button>
       <button onClick={refresh}>Refresh</button>
       <div className="grid-container">
         {grid.map((elem, idx) => {

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { wait } from '../helpers';
-import './bubbleSort.css';
+import { useSelector } from 'react-redux';
+import { wait } from './helpers';
+import './styles/bubbleSort.css';
 
-const BubbleSort = ({ mainGrid, speed, sorting }) => {
+const BubbleSort = ({ speed }) => {
+  const sorting = useSelector((state) => state.sorting.sorting);
+  const mainGrid = useSelector((state) => state.sorting.grid);
   const [grid, setGrid] = useState([]);
   const select = (idx) => document.getElementById(`bubblesort:${idx}`);
 

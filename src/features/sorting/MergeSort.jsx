@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { wait } from '../helpers';
-import './mergeSort.css';
+import { wait } from './helpers';
+import './styles/mergeSort.css';
 
 const MergeSort = ({ mainGrid, speed, sorting }) => {
   const [grid, setGrid] = useState([]);

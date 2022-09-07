@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { wait, swap } from '../helpers';
-import './selectionSort.css';
+import { wait, swap } from './helpers';
+import './styles/selectionSort.css';
 
 const SelectionSort = ({ mainGrid, speed, sorting }) => {
   const [grid, setGrid] = useState([]);

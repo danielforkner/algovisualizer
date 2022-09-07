@@ -1,5 +1,8 @@
 body {
-    background-color: beige;
+    background-color: #f5f5dc;
+}
+#main {
+    width: 100%;
 }
 .container {
     display: flex;
@@ -11,6 +14,16 @@ body {
 #sidebar {
     padding: 1rem;
     gap: 1rem;
+}
+.activeLink {
+    color: #c916c9;
+    font-weight: bold;
+    text-decoration: none;
+
+} .inactiveLink {
+    color: #818158;
+    font-weight: bold;
+    text-decoration: none;
 }
 .cell {
     display: flex;
