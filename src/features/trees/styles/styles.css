@@ -1,0 +1,16 @@
+.activeTreeLink {
+    color: #c916c9;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: yellow;
+} .inactiveTreeLink {
+    color: #818158;
+    font-weight: bold;
+    text-decoration: none;
+}
+.links {
+    display: flex;
+    margin: 1px;
+    gap: 1rem;
+    justify-content: left
+}
