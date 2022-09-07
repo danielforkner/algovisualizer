@@ -5,7 +5,7 @@ import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
 import { useDispatch, useSelector } from 'react-redux';
-import { refreshGrid, setSorting } from './sortingSlice';
+import { refreshGrid, setSorting, toggleSorting } from './sortingSlice';
 
 const SortMain = () => {
   const grid = useSelector((state) => state.sorting.grid);
@@ -24,6 +24,7 @@ const SortMain = () => {
 
   const handleSort = async () => {
     dispatch(setSorting(true));
+    // dispatch(toggleSorting());
   };
 
   return (

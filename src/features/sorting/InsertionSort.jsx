@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { wait, swap } from './helpers';
 import './styles/insertionSort.css';
 
-const InsertionSort = ({ mainGrid, speed, sorting }) => {
+const InsertionSort = ({ mainGrid, speed }) => {
   const [grid, setGrid] = useState([]);
+  const sorting = useSelector((state) => state.sorting.sorting);
   const select = (idx) => document.getElementById(`insertionsort:${idx}`);
 
   useEffect(() => {

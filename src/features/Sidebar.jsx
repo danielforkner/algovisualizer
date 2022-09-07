@@ -10,10 +10,16 @@ export default function Sidebar() {
         Home
       </NavLink>
       <NavLink
-        to="/sorting"
+        to="sorting"
         className={({ isActive }) => (isActive ? 'activeLink' : 'inactiveLink')}
       >
         Sorting
+      </NavLink>
+      <NavLink
+        to="trees"
+        className={({ isActive }) => (isActive ? 'activeLink' : 'inactiveLink')}
+      >
+        Trees
       </NavLink>
     </div>
   );

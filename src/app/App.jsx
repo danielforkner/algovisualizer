@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from '../Home';
 import SortMain from '../features/sorting/SortMain';
 import Sidebar from '../features/Sidebar';
+import TreesMain from '../features/trees/TreesMain';
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="sorting" element={<SortMain />} />
+          <Route path="trees" element={<TreesMain />} />
           <Route
             path="*"
             element={
