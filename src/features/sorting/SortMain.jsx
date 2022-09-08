@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Chart, registerables } from 'chart.js';
 import { wait } from './helpers';
 import InsertionSort from './InsertionSort';
 import BubbleSort from './BubbleSort';
@@ -8,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { refreshGrid, setSorting, toggleSorting } from './sortingSlice';
 
 const SortMain = () => {
+  Chart.register(...registerables);
   const grid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
   const dispatch = useDispatch();
@@ -30,7 +32,8 @@ const SortMain = () => {
 
   return (
     <div>
-      <div className="controls-container">
+      <div className="container">
+        <div>Speed: </div>
         <input
           type="range"
           min="75"
@@ -40,8 +43,8 @@ const SortMain = () => {
           className="speedSlider"
           onChange={(e) => setSpeed(e.target.value)}
         />
+        <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
       </div>
-      <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
       <button onClick={handleSort}>Start Sorting</button>
       <button onClick={refresh}>Refresh</button>
       <div className="grid-container">
@@ -57,10 +60,30 @@ const SortMain = () => {
           );
         })}
       </div>
-      <InsertionSort mainGrid={grid} speed={speed} sorting={sorting} />
-      <SelectionSort mainGrid={grid} speed={speed} sorting={sorting} />
-      <BubbleSort mainGrid={grid} speed={speed} sorting={sorting} />
-      <MergeSort mainGrid={grid} speed={speed} sorting={sorting} />
+      <InsertionSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
+      <SelectionSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
+      <BubbleSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
+      <MergeSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
     </div>
   );
 };
