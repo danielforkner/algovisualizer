@@ -4,6 +4,9 @@ import { wait } from './helpers';
 import './styles/bubbleSort.css';
 
 const BubbleSort = ({ speed }) => {
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+  const [waitCount, setWaitCount] = useState(0);
   const sorting = useSelector((state) => state.sorting.sorting);
   const mainGrid = useSelector((state) => state.sorting.grid);
   const [grid, setGrid] = useState([]);
@@ -24,6 +27,8 @@ const BubbleSort = ({ speed }) => {
   };
 
   async function sort() {
+    setStartTime(Date.now());
+    setWaitCount(() => 0);
     let unsorted = true;
     let counter = 0;
     while (unsorted) {
@@ -31,6 +36,7 @@ const BubbleSort = ({ speed }) => {
       for (let i = 0; i < grid.length - 1 - counter; i++) {
         select(i).classList.add('pointer');
         await wait(speed);
+        setWaitCount((waitCount) => (waitCount += 1));
         select(i - 1)?.classList.remove('swap1');
         if (grid[i] > grid[i + 1]) {
           unsorted = true;
@@ -44,6 +50,8 @@ const BubbleSort = ({ speed }) => {
       select(grid.length - 2 - counter)?.classList.remove('swap1');
       counter++;
     }
+    setEndTime(Date.now());
+    // finished sorting
     for (let i = 0; i < grid.length; i++) {
       await wait(40);
       select(i).classList.add('complete');
@@ -66,6 +74,14 @@ const BubbleSort = ({ speed }) => {
             </div>
           );
         })}
+      </div>
+      <div className="end-time">
+        {endTime
+          ? `Time to sort: ${(
+              (endTime - startTime - speed * waitCount) /
+              1000
+            ).toFixed(3)}s`
+          : null}
       </div>
     </div>
   );

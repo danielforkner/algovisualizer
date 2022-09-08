@@ -37,14 +37,14 @@ export default function BinaryTree() {
   class BinaryTree {
     constructor() {
       this.root = null;
-      this.rootX = 250; // starting position on canvas
+      this.rootX = canvasWidth / 2; // starting position on canvas
       this.rootY = 25; // starting position on canvas
       this.nodeXOffset = 200; // how far apart nodes are X
       this.nodeYOffset = 60; // how far apart nodes are Y
       this.levelIncrement = 1; // root is level 0
       this.rootRadius = 20; // starting node size on canvas
     }
-    async depthFirstSearch() {}
+    async depthFirstSearch(node, target) {}
     async breadthFirstSearch() {}
     async insertRoot(value) {
       this.root = new Node({

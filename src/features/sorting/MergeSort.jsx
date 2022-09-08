@@ -4,6 +4,9 @@ import './styles/mergeSort.css';
 
 const MergeSort = ({ mainGrid, speed, sorting }) => {
   const [grid, setGrid] = useState([]);
+  const [startTime, setStartTime] = useState(0);
+  const [endTime, setEndTime] = useState(0);
+  const [waitCount, setWaitCount] = useState(0);
   // const len = grid.length;
   // const [stack, setStack] = useState([]);
   const select = (idx) => document.getElementById(`mergesort:${idx}`);
@@ -89,6 +92,8 @@ const MergeSort = ({ mainGrid, speed, sorting }) => {
     }
     setGrid([...array]);
     await wait(speed);
+    setWaitCount((waitCount) => (waitCount += 1));
+
     // --------> for visualization purposes only
     // leftLen = mid - start + 1;
     // rightLen = end - mid;
@@ -107,9 +112,11 @@ const MergeSort = ({ mainGrid, speed, sorting }) => {
     // <--------
   }
   async function sort() {
+    setStartTime(Date.now());
+    setWaitCount(() => 0);
     await mergeSort([...grid], 0, grid.length - 1);
+    setEndTime(Date.now());
     for (let i = 0; i < grid.length; i++) {
-      await wait(40);
       let cell = select(i);
       cell.classList.remove('left', 'right');
       cell.classList.add('complete');
@@ -132,6 +139,14 @@ const MergeSort = ({ mainGrid, speed, sorting }) => {
             </div>
           );
         })}
+      </div>
+      <div className="end-time">
+        {endTime
+          ? `Time to sort: ${(
+              (endTime - startTime - speed * waitCount) /
+              1000
+            ).toFixed(3)}s`
+          : null}
       </div>
       {/* {!stack.length ? null : (
         <>
