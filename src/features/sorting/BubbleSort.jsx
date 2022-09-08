@@ -1,24 +1,27 @@
-import { current } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { wait } from './helpers';
 import './styles/bubbleSort.css';
 
 const BubbleSort = ({ speed, Chart }) => {
+  // component state
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
+  const [grid, setGrid] = useState([]);
+  // store
   const sorting = useSelector((state) => state.sorting.sorting);
   const mainGrid = useSelector((state) => state.sorting.grid);
-  const [grid, setGrid] = useState([]);
+  // chart
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
   const [currentChart, setCurrentChart] = useState(null);
   const [backgroundColors, setBackgroundcolors] = useState([]);
   const barColor = 'rgba(201, 203, 207, 1)';
   const pointerColor = 'rgba(140, 255, 125, 1)';
-  const select = (idx) => document.getElementById(`bubblesort:${idx}`);
+  const completeColor = 'rgba(140, 255, 125, 1)';
 
+  // get canvas from DOM
   useEffect(() => {
     setC(document.getElementById('bubbleChart'));
     if (c) {
@@ -26,11 +29,11 @@ const BubbleSort = ({ speed, Chart }) => {
     }
   }, [c, ctx]);
 
+  // refresh component state
   useEffect(() => {
     const buildGrid = async () => {
-      setBackgroundcolors((backgroundColors) => []);
+      setBackgroundcolors([]);
       let array = [];
-      // if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
         setBackgroundcolors((backgroundColors) => [
@@ -45,8 +48,8 @@ const BubbleSort = ({ speed, Chart }) => {
     buildGrid();
   }, [mainGrid]);
 
+  // create chart
   useEffect(() => {
-    console.log('current chart: ', currentChart);
     const data = {
       labels: [...grid.keys()],
       datasets: [
@@ -70,7 +73,6 @@ const BubbleSort = ({ speed, Chart }) => {
     };
     const buildChart = () => {
       if (currentChart) currentChart.destroy();
-      console.log(backgroundColors);
       const chart = new Chart(ctx, config);
       chart.options.animation = false; // disables all animations
       setCurrentChart(chart);
@@ -93,6 +95,14 @@ const BubbleSort = ({ speed, Chart }) => {
     array[i + 1] = temp;
   };
 
+  const updateChartColors = (array, color, idx) => {
+    let replace = array.indexOf(color);
+    const newArray = [...array];
+    if (replace >= 0) newArray[replace] = barColor;
+    newArray[idx] = color;
+    return newArray;
+  };
+
   async function sort() {
     setStartTime(Date.now());
     setWaitCount(() => 0);
@@ -101,55 +111,33 @@ const BubbleSort = ({ speed, Chart }) => {
     while (unsorted) {
       unsorted = false;
       for (let i = 0; i < grid.length - 1 - counter; i++) {
-        // select(i).classList.add('pointer');
-        setBackgroundcolors((backgroundColors) => {
-          let newArray = [...backgroundColors];
-          let replace = newArray.indexOf(pointerColor);
-          newArray[replace] = barColor;
-          newArray[i] = pointerColor;
-          return newArray;
-        });
+        setBackgroundcolors((backgroundColors) =>
+          updateChartColors(backgroundColors, pointerColor, i)
+        );
         await wait(speed);
         setWaitCount((waitCount) => (waitCount += 1));
-        // select(i - 1)?.classList.remove('swap1');
         if (grid[i] > grid[i + 1]) {
           unsorted = true;
-          // select(i).classList.add('swap1');
           swap(i, grid);
           setGrid([...grid]);
         }
-        // select(i).classList.remove('pointer');
       }
-      // select(grid.length - 1 - counter).classList.add('sorted');
-      // select(grid.length - 2 - counter)?.classList.remove('swap1');
       counter++;
     }
     // finished sorting
     setEndTime(Date.now());
-    // for (let i = 0; i < grid.length; i++) {
-    // await wait(40);
-    // select(i).classList.add('complete');
-    // select(i).classList.add('sorted');
-    // }
+    for (let i = 0; i < grid.length; i++) {
+      await wait(40);
+      setBackgroundcolors((backgroundColors) => {
+        return ([...backgroundColors][i] = completeColor);
+      });
+    }
   }
 
   return (
     <div>
       <h1>Bubble Sort</h1>
       <canvas id="bubbleChart"></canvas>
-      <div className="grid-container">
-        {/* {grid.map((elem, idx) => {
-          return (
-            <div
-              className="cell"
-              id={`bubblesort:${idx}`}
-              key={`bubblesort:${idx}`}
-            >
-              {elem}
-            </div>
-          );
-        })} */}
-      </div>
       <div className="end-time">
         {endTime
           ? `Time to sort: ${(

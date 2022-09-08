@@ -60,15 +60,30 @@ const SortMain = () => {
           );
         })}
       </div>
-      <InsertionSort mainGrid={grid} speed={speed} sorting={sorting} />
-      <SelectionSort mainGrid={grid} speed={speed} sorting={sorting} />
+      <InsertionSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
+      <SelectionSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
       <BubbleSort
         Chart={Chart}
         mainGrid={grid}
         speed={speed}
         sorting={sorting}
       />
-      <MergeSort mainGrid={grid} speed={speed} sorting={sorting} />
+      <MergeSort
+        Chart={Chart}
+        mainGrid={grid}
+        speed={speed}
+        sorting={sorting}
+      />
     </div>
   );
 };

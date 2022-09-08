@@ -3,21 +3,49 @@ import { useSelector } from 'react-redux';
 import { wait, swap } from './helpers';
 import './styles/insertionSort.css';
 
-const InsertionSort = ({ speed }) => {
+const InsertionSort = ({ speed, Chart }) => {
+  // component state
   const [grid, setGrid] = useState([]);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
+  // store
   const mainGrid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
-  const select = (idx) => document.getElementById(`insertionsort:${idx}`);
+  // chart
+  const [c, setC] = useState(null);
+  const [ctx, setCtx] = useState(null);
+  const [currentChart, setCurrentChart] = useState(null);
+  const [backgroundColors, setBackgroundcolors] = useState([]);
+  const barColor = 'rgba(201, 203, 207, 1)';
+  const pointerColor = 'rgba(140, 255, 125, 1)';
+  const completeColor = 'rgba(140, 255, 125, 1)';
+  const selectedColor = 'rgba(125, 233, 140, 1)';
 
+  // get canvas from DOM
+  useEffect(() => {
+    setC(document.getElementById('insertionChart'));
+    if (c) {
+      setCtx(c.getContext('2d'));
+    }
+  }, [c, ctx]);
+
+  // start
+  useEffect(() => {
+    if (sorting) sort();
+  }, [sorting]);
+
+  // refresh component state
   useEffect(() => {
     const buildGrid = async () => {
+      setBackgroundcolors([]);
       let array = [];
-      if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
+        setBackgroundcolors((backgroundColors) => [
+          ...backgroundColors,
+          barColor,
+        ]);
         setGrid([...array]);
         await wait(40);
       }
@@ -26,56 +54,97 @@ const InsertionSort = ({ speed }) => {
     buildGrid();
   }, [mainGrid]);
 
+  // create chart
   useEffect(() => {
-    if (sorting) sort();
-  }, [sorting]);
+    const data = {
+      labels: [...grid.keys()],
+      datasets: [
+        {
+          data: grid,
+          backgroundColor: backgroundColors,
+          labels: false,
+        },
+      ],
+    };
+    const config = {
+      type: 'bar',
+      data,
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    };
+    const buildChart = () => {
+      if (currentChart) currentChart.destroy();
+      const chart = new Chart(ctx, config);
+      chart.options.animation = false; // disables all animations
+      setCurrentChart(chart);
+    };
+
+    if (ctx && !currentChart) buildChart();
+    if (currentChart) {
+      currentChart.config.data = data;
+      currentChart.update();
+    }
+  }, [grid, ctx, backgroundColors]);
+
+  const updateChartColors = (array, color, idx) => {
+    let replace = array.indexOf(color);
+    const newArray = [...array];
+    if (replace >= 0) newArray[replace] = barColor;
+    newArray[idx] = color;
+    return newArray;
+  };
 
   async function sort() {
     setStartTime(Date.now());
     setWaitCount(() => 0);
     for (let i = 0; i < grid.length; i++) {
-      select(i).classList.add('pointer-i');
-      let j = i;
-      while (j > 0 && grid[j] < grid[j - 1]) {
-        select(j).classList.add('selected-j');
-        await wait(speed);
-        setWaitCount((waitCount) => (waitCount += 1));
-        swap(j, j - 1, grid);
-        setGrid([...grid]);
-        select(j).classList.remove('selected-j');
-        j--;
-      }
-      select(j).classList.add('selected-j');
+      setBackgroundcolors((backgroundColors) =>
+        updateChartColors(backgroundColors, pointerColor, i)
+      );
       await wait(speed);
       setWaitCount((waitCount) => (waitCount += 1));
-      select(j).classList.remove('selected-j');
-      select(i).classList.remove('pointer-i');
+      let j = i;
+      while (j > 0 && grid[j] < grid[j - 1]) {
+        if (j !== i) {
+          let idx = j;
+          setBackgroundcolors((backgroundColors) =>
+            updateChartColors(backgroundColors, selectedColor, idx)
+          );
+          await wait(speed);
+          setWaitCount((waitCount) => (waitCount += 1));
+        }
+        swap(j, j - 1, grid);
+        setGrid([...grid]);
+        j--;
+      }
+      setBackgroundcolors((backgroundColors) => {
+        let replace = backgroundColors.indexOf(selectedColor);
+        if (replace) {
+          const newArray = [...backgroundColors];
+          newArray[replace] = barColor;
+          return newArray;
+        }
+      });
     }
     // finished sorting
     setEndTime(Date.now());
     for (let i = 0; i < grid.length; i++) {
       await wait(40);
-      select(i).classList.add('complete');
-      select(i).classList.add('sorted');
+      setBackgroundcolors((backgroundColors) => {
+        return ([...backgroundColors][i] = completeColor);
+      });
     }
   }
 
   return (
     <div>
       <h1>Insertion Sort</h1>
-      <div className="grid-container">
-        {grid.map((elem, idx) => {
-          return (
-            <div
-              className="cell"
-              id={`insertionsort:${idx}`}
-              key={`insertionsort:${idx}`}
-            >
-              {elem}
-            </div>
-          );
-        })}
-      </div>
+      <canvas id="insertionChart"></canvas>
       <div className="end-time">
         {endTime
           ? `Time to sort: ${(
@@ -84,8 +153,6 @@ const InsertionSort = ({ speed }) => {
             ).toFixed(3)}s`
           : null}
       </div>
-      {/* <button onClick={sort}>Sort!</button> */}
-      {/* <button onClick={refresh}>Refresh</button> */}
     </div>
   );
 };
