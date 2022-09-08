@@ -24,6 +24,43 @@ const SortMain = () => {
     dispatch(refreshGrid(arr));
   };
 
+  const refreshBackwards = () => {
+    let arr = [];
+    for (let i = 0; i < 50; i++) {
+      arr.unshift(i);
+    }
+    console.log('new grid: ', arr);
+    dispatch(refreshGrid(arr));
+  };
+
+  const refreshAlternate = () => {
+    let arr = [];
+    let count = 0;
+    for (let i = 0; i < 50; i++) {
+      if (count % 2 === 0) {
+        arr.unshift(i);
+      } else {
+        arr.push(i);
+      }
+      count++;
+    }
+    dispatch(refreshGrid(arr));
+  };
+
+  const refreshPyramid = () => {
+    let arr = [];
+    let count = 0;
+    for (let i = 50; i > 0; i--) {
+      if (count % 2 === 0) {
+        arr.unshift(i);
+      } else {
+        arr.push(i);
+      }
+      count++;
+    }
+    dispatch(refreshGrid(arr));
+  };
+
   const handleSort = async () => {
     dispatch(setSorting(true));
     await wait(50);
@@ -46,7 +83,10 @@ const SortMain = () => {
         <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
       </div>
       <button onClick={handleSort}>Start Sorting</button>
-      <button onClick={refresh}>Refresh</button>
+      <button onClick={refresh}>Generate Random List</button>
+      <button onClick={refreshAlternate}>Generate an Inverted Pyramid</button>
+      <button onClick={refreshPyramid}>Generate a Pyramid</button>
+      <button onClick={refreshBackwards}>Generate Backwards List</button>
       <div className="grid-container">
         {grid.map((elem, idx) => {
           return (
