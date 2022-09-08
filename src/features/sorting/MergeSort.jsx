@@ -15,7 +15,7 @@ const MergeSort = ({ speed }) => {
   useEffect(() => {
     const buildGrid = async () => {
       let array = [];
-      select(0).className = 'cell'; // without this the first cell retains the classnames(?)
+      if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
         setGrid([...array]);

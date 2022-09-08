@@ -3,19 +3,29 @@ import { useSelector } from 'react-redux';
 import { wait } from './helpers';
 import './styles/bubbleSort.css';
 
-const BubbleSort = ({ speed }) => {
+const BubbleSort = ({ speed, Chart }) => {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
   const sorting = useSelector((state) => state.sorting.sorting);
   const mainGrid = useSelector((state) => state.sorting.grid);
   const [grid, setGrid] = useState([]);
+  const [c, setC] = useState(null);
+  const [ctx, setCtx] = useState(null);
+  const [currentChart, setCurrentChart] = useState(null);
   const select = (idx) => document.getElementById(`bubblesort:${idx}`);
+
+  useEffect(() => {
+    setC(document.getElementById('bubbleChart'));
+    if (c) {
+      setCtx(c.getContext('2d'));
+    }
+  }, [c, ctx]);
 
   useEffect(() => {
     const buildGrid = async () => {
       let array = [];
-      select(0).className = 'cell'; // without this the first cell retains the classnames(?)
+      // if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
         setGrid([...array]);
@@ -25,6 +35,25 @@ const BubbleSort = ({ speed }) => {
     setEndTime(0);
     buildGrid();
   }, [mainGrid]);
+
+  useEffect(() => {
+    const buildChart = () => {
+      if (currentChart) currentChart.destroy();
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          datasets: [
+            {
+              data: grid,
+            },
+          ],
+          labels: [...grid.keys()],
+        },
+      });
+      setCurrentChart(chart);
+    };
+    if (ctx) buildChart();
+  }, [grid, ctx]);
 
   useEffect(() => {
     if (sorting) sort();
@@ -44,36 +73,37 @@ const BubbleSort = ({ speed }) => {
     while (unsorted) {
       unsorted = false;
       for (let i = 0; i < grid.length - 1 - counter; i++) {
-        select(i).classList.add('pointer');
+        // select(i).classList.add('pointer');
         await wait(speed);
         setWaitCount((waitCount) => (waitCount += 1));
-        select(i - 1)?.classList.remove('swap1');
+        // select(i - 1)?.classList.remove('swap1');
         if (grid[i] > grid[i + 1]) {
           unsorted = true;
-          select(i).classList.add('swap1');
+          // select(i).classList.add('swap1');
           swap(i, grid);
           setGrid([...grid]);
         }
-        select(i).classList.remove('pointer');
+        // select(i).classList.remove('pointer');
       }
-      select(grid.length - 1 - counter).classList.add('sorted');
-      select(grid.length - 2 - counter)?.classList.remove('swap1');
+      // select(grid.length - 1 - counter).classList.add('sorted');
+      // select(grid.length - 2 - counter)?.classList.remove('swap1');
       counter++;
     }
     // finished sorting
     setEndTime(Date.now());
-    for (let i = 0; i < grid.length; i++) {
-      await wait(40);
-      select(i).classList.add('complete');
-      select(i).classList.add('sorted');
-    }
+    // for (let i = 0; i < grid.length; i++) {
+    // await wait(40);
+    // select(i).classList.add('complete');
+    // select(i).classList.add('sorted');
+    // }
   }
 
   return (
     <div>
       <h1>Bubble Sort</h1>
       <div className="grid-container">
-        {grid.map((elem, idx) => {
+        <canvas id="bubbleChart"></canvas>
+        {/* {grid.map((elem, idx) => {
           return (
             <div
               className="cell"
@@ -83,7 +113,7 @@ const BubbleSort = ({ speed }) => {
               {elem}
             </div>
           );
-        })}
+        })} */}
       </div>
       <div className="end-time">
         {endTime
