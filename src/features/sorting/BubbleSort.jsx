@@ -1,3 +1,4 @@
+import { current } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { wait } from './helpers';
@@ -13,6 +14,9 @@ const BubbleSort = ({ speed, Chart }) => {
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
   const [currentChart, setCurrentChart] = useState(null);
+  const [backgroundColors, setBackgroundcolors] = useState([]);
+  const barColor = 'rgba(201, 203, 207, 1)';
+  const pointerColor = 'rgba(140, 255, 125, 1)';
   const select = (idx) => document.getElementById(`bubblesort:${idx}`);
 
   useEffect(() => {
@@ -24,10 +28,15 @@ const BubbleSort = ({ speed, Chart }) => {
 
   useEffect(() => {
     const buildGrid = async () => {
+      setBackgroundcolors((backgroundColors) => []);
       let array = [];
       // if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
+        setBackgroundcolors((backgroundColors) => [
+          ...backgroundColors,
+          barColor,
+        ]);
         setGrid([...array]);
         await wait(40);
       }
@@ -37,28 +46,42 @@ const BubbleSort = ({ speed, Chart }) => {
   }, [mainGrid]);
 
   useEffect(() => {
+    console.log('current chart: ', currentChart);
+    const data = {
+      labels: [...grid.keys()],
+      datasets: [
+        {
+          data: grid,
+          backgroundColor: backgroundColors,
+          labels: false,
+        },
+      ],
+    };
+    const config = {
+      type: 'bar',
+      data,
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    };
     const buildChart = () => {
       if (currentChart) currentChart.destroy();
-      const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          datasets: [
-            {
-              data: grid,
-            },
-          ],
-          labels: [...grid.keys()],
-        },
-      });
+      console.log(backgroundColors);
+      const chart = new Chart(ctx, config);
+      chart.options.animation = false; // disables all animations
       setCurrentChart(chart);
     };
+
     if (ctx && !currentChart) buildChart();
     if (currentChart) {
-      currentChart.config.data.datasets = [{ data: grid }];
+      currentChart.config.data = data;
       currentChart.update();
-      console.log(currentChart);
     }
-  }, [grid, ctx]);
+  }, [grid, ctx, backgroundColors]);
 
   useEffect(() => {
     if (sorting) sort();
@@ -79,6 +102,13 @@ const BubbleSort = ({ speed, Chart }) => {
       unsorted = false;
       for (let i = 0; i < grid.length - 1 - counter; i++) {
         // select(i).classList.add('pointer');
+        setBackgroundcolors((backgroundColors) => {
+          let newArray = [...backgroundColors];
+          let replace = newArray.indexOf(pointerColor);
+          newArray[replace] = barColor;
+          newArray[i] = pointerColor;
+          return newArray;
+        });
         await wait(speed);
         setWaitCount((waitCount) => (waitCount += 1));
         // select(i - 1)?.classList.remove('swap1');
