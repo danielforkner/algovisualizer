@@ -13,7 +13,17 @@ const BubbleSort = ({ speed }) => {
   const select = (idx) => document.getElementById(`bubblesort:${idx}`);
 
   useEffect(() => {
-    setGrid([...mainGrid]);
+    const buildGrid = async () => {
+      let array = [];
+      select(0).className = 'cell'; // without this the first cell retains the classnames(?)
+      for (let i = 0; i < mainGrid.length; i++) {
+        array.push(mainGrid[i]);
+        setGrid([...array]);
+        await wait(40);
+      }
+    };
+    setEndTime(0);
+    buildGrid();
   }, [mainGrid]);
 
   useEffect(() => {
@@ -50,8 +60,8 @@ const BubbleSort = ({ speed }) => {
       select(grid.length - 2 - counter)?.classList.remove('swap1');
       counter++;
     }
-    setEndTime(Date.now());
     // finished sorting
+    setEndTime(Date.now());
     for (let i = 0; i < grid.length; i++) {
       await wait(40);
       select(i).classList.add('complete');

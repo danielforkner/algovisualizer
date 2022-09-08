@@ -1,13 +1,34 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { wait, swap } from './helpers';
 import './styles/selectionSort.css';
 
-const SelectionSort = ({ mainGrid, speed, sorting }) => {
+const SelectionSort = ({ speed }) => {
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
   const [grid, setGrid] = useState([]);
   const select = (idx) => document.getElementById(`selectionsort:${idx}`);
+  const mainGrid = useSelector((state) => state.sorting.grid);
+  const sorting = useSelector((state) => state.sorting.sorting);
+
+  useEffect(() => {
+    const buildGrid = async () => {
+      let array = [];
+      select(0).className = 'cell'; // without this the first cell retains the classnames(?)
+      for (let i = 0; i < mainGrid.length; i++) {
+        array.push(mainGrid[i]);
+        setGrid([...array]);
+        await wait(40);
+      }
+    };
+    setEndTime(0);
+    buildGrid();
+  }, [mainGrid]);
+
+  useEffect(() => {
+    if (sorting) sort();
+  }, [sorting]);
 
   const sort = async () => {
     setStartTime(Date.now());
@@ -41,14 +62,6 @@ const SelectionSort = ({ mainGrid, speed, sorting }) => {
       select(i).classList.add('complete');
     }
   };
-
-  useEffect(() => {
-    setGrid([...mainGrid]);
-  }, [mainGrid]);
-
-  useEffect(() => {
-    if (sorting) sort();
-  }, [sorting]);
 
   return (
     <div>

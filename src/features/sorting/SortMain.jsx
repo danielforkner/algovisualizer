@@ -24,7 +24,8 @@ const SortMain = () => {
 
   const handleSort = async () => {
     dispatch(setSorting(true));
-    // dispatch(toggleSorting());
+    await wait(50);
+    dispatch(toggleSorting());
   };
 
   return (

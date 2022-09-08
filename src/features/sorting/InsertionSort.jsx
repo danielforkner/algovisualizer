@@ -3,16 +3,27 @@ import { useSelector } from 'react-redux';
 import { wait, swap } from './helpers';
 import './styles/insertionSort.css';
 
-const InsertionSort = ({ mainGrid, speed }) => {
+const InsertionSort = ({ speed }) => {
   const [grid, setGrid] = useState([]);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
+  const mainGrid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
   const select = (idx) => document.getElementById(`insertionsort:${idx}`);
 
   useEffect(() => {
-    setGrid([...mainGrid]);
+    const buildGrid = async () => {
+      let array = [];
+      select(0).className = 'cell'; // without this the first cell retains the classnames(?)
+      for (let i = 0; i < mainGrid.length; i++) {
+        array.push(mainGrid[i]);
+        setGrid([...array]);
+        await wait(40);
+      }
+    };
+    setEndTime(0);
+    buildGrid();
   }, [mainGrid]);
 
   useEffect(() => {
