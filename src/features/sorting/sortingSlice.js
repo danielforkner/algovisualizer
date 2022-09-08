@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const grid = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 50; i++) {
   grid.push(Math.floor(Math.random() * 100));
 }
 

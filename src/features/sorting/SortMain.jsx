@@ -7,6 +7,7 @@ import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
 import { useDispatch, useSelector } from 'react-redux';
 import { refreshGrid, setSorting, toggleSorting } from './sortingSlice';
+import './styles/sortStyles.css';
 
 const SortMain = () => {
   Chart.register(...registerables);
@@ -15,11 +16,10 @@ const SortMain = () => {
   const dispatch = useDispatch();
   const [speed, setSpeed] = useState(500);
 
-  const refresh = async () => {
+  const refresh = () => {
     let arr = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 50; i++) {
       arr.push(Math.floor(Math.random() * 100));
-      await wait(40);
     }
     dispatch(refreshGrid(arr));
   };
@@ -60,30 +60,12 @@ const SortMain = () => {
           );
         })}
       </div>
-      <InsertionSort
-        Chart={Chart}
-        mainGrid={grid}
-        speed={speed}
-        sorting={sorting}
-      />
-      <SelectionSort
-        Chart={Chart}
-        mainGrid={grid}
-        speed={speed}
-        sorting={sorting}
-      />
-      <BubbleSort
-        Chart={Chart}
-        mainGrid={grid}
-        speed={speed}
-        sorting={sorting}
-      />
-      <MergeSort
-        Chart={Chart}
-        mainGrid={grid}
-        speed={speed}
-        sorting={sorting}
-      />
+      <div id="grid-display">
+        <InsertionSort Chart={Chart} speed={speed} />
+        <SelectionSort Chart={Chart} speed={speed} />
+        <BubbleSort Chart={Chart} speed={speed} />
+        <MergeSort Chart={Chart} speed={speed} />
+      </div>
     </div>
   );
 };

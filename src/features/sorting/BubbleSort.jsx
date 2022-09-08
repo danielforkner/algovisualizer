@@ -41,7 +41,7 @@ const BubbleSort = ({ speed, Chart }) => {
           barColor,
         ]);
         setGrid([...array]);
-        await wait(40);
+        await wait(10);
       }
     };
     setEndTime(0);

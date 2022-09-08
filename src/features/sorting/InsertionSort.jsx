@@ -47,7 +47,7 @@ const InsertionSort = ({ speed, Chart }) => {
           barColor,
         ]);
         setGrid([...array]);
-        await wait(40);
+        await wait(10);
       }
     };
     setEndTime(0);
@@ -75,6 +75,7 @@ const InsertionSort = ({ speed, Chart }) => {
             display: false,
           },
         },
+        resopnsive: false,
       },
     };
     const buildChart = () => {
