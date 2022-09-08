@@ -52,7 +52,12 @@ const BubbleSort = ({ speed, Chart }) => {
       });
       setCurrentChart(chart);
     };
-    if (ctx) buildChart();
+    if (ctx && !currentChart) buildChart();
+    if (currentChart) {
+      currentChart.config.data.datasets = [{ data: grid }];
+      currentChart.update();
+      console.log(currentChart);
+    }
   }, [grid, ctx]);
 
   useEffect(() => {
@@ -101,8 +106,8 @@ const BubbleSort = ({ speed, Chart }) => {
   return (
     <div>
       <h1>Bubble Sort</h1>
+      <canvas id="bubbleChart"></canvas>
       <div className="grid-container">
-        <canvas id="bubbleChart"></canvas>
         {/* {grid.map((elem, idx) => {
           return (
             <div
