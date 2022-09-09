@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { wait } from './helpers';
 import InsertionSort from './InsertionSort';
 import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
@@ -10,7 +9,8 @@ import {
   refreshGrid,
   setSize,
   setSorting,
-  toggleSorting,
+  setSpeed,
+  updateActiveSorting,
 } from './sortingSlice';
 import './styles/sortStyles.css';
 import {
@@ -18,7 +18,6 @@ import {
   Paper,
   Stack,
   Slider,
-  Box,
   Input,
   Container,
   Drawer,
@@ -37,6 +36,7 @@ import PlayCircleFilledOutlinedIcon from '@mui/icons-material/PlayCircleFilledOu
 import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
 import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
 import SyncDisabledOutlinedIcon from '@mui/icons-material/SyncDisabledOutlined';
+import SortSettings from './SortSettings';
 
 const SortMain = () => {
   Chart.register(...registerables);
@@ -46,11 +46,13 @@ const SortMain = () => {
     'bubble',
     'merge',
   ]);
+
   const grid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
   const size = useSelector((state) => state.sorting.size);
+  const speed = useSelector((state) => state.sorting.speed);
+  const activeSorting = useSelector((state) => state.sorting.activeSorting);
   const dispatch = useDispatch();
-  const [speed, setSpeed] = useState(500);
   const [isControls, setIsControls] = useState(false);
   const [chartType, setChartType] = useState('random');
 
@@ -99,6 +101,7 @@ const SortMain = () => {
   };
 
   const handleRefresh = () => {
+    if (sorting) return;
     switch (chartType) {
       case 'random':
         refreshRandom();
@@ -118,209 +121,58 @@ const SortMain = () => {
   };
 
   const handleSort = async () => {
+    if (sorting) return;
+    dispatch(updateActiveSorting(active.length));
     dispatch(setSorting(true));
-    await wait(50);
-    dispatch(toggleSorting());
-  };
-
-  const handleSpeedSlider = (event, newValue) => {
-    setSpeed(newValue);
-  };
-  const handleSizeSlider = (event, newValue) => {
-    dispatch(setSize(newValue));
-  };
-
-  const handleSizeInput = (event) => {
-    dispatch(
-      setSize(event.target.value === '' ? '' : Number(event.target.value))
-    );
-  };
-
-  const handleBlur = () => {
-    if (size < 0) {
-      dispatch(setSize(0));
-    } else if (size > 100) {
-      dispatch(setSize(100));
-    }
   };
 
   const toggleControls = () => {
+    if (sorting) return;
     setIsControls(!isControls);
   };
 
+  useEffect(() => {
+    if (activeSorting <= 0) {
+      dispatch(setSorting(false));
+    }
+  }, [activeSorting]);
+
   return (
     <div>
-      <Container>
-        <IconButton aria-label="sort">
+      <SortSettings
+        active={active}
+        setActive={setActive}
+        isControls={isControls}
+        setIsControls={setIsControls}
+        setChartType={setChartType}
+        handleRefresh={handleRefresh}
+      />
+      <div className="container">
+        <IconButton onClick={handleSort} aria-label="sort">
           {sorting ? (
             <HourglassEmptyOutlinedIcon fontSize="large" />
           ) : (
-            <PlayCircleFilledOutlinedIcon
-              onClick={handleSort}
-              color="secondary"
-              fontSize="large"
-            />
+            <PlayCircleFilledOutlinedIcon color="secondary" fontSize="large" />
           )}
         </IconButton>
-        <IconButton aria-label="settings">
+        <IconButton onClick={toggleControls} aria-label="settings">
           {sorting ? (
-            <SettingsOutlinedIcon fontSize="large" color="primary" />
+            <SettingsOutlinedIcon fontSize="large" />
           ) : isControls ? (
-            <SettingsOutlinedIcon fontSize="large" color="primary" />
+            <SettingsOutlinedIcon fontSize="large" />
           ) : (
-            <SettingsIcon
-              fontSize="large"
-              color="primary"
-              onClick={toggleControls}
-            />
+            <SettingsIcon fontSize="large" color="primary" />
           )}
         </IconButton>
-        <IconButton aria-label="refresh-chart">
+        <IconButton onClick={handleRefresh} aria-label="refresh-chart">
           {sorting ? (
-            <SyncDisabledOutlinedIcon fontSize="large" color="primary" />
+            <SyncDisabledOutlinedIcon fontSize="large" />
           ) : (
             <SyncOutlinedIcon fontSize="large" color="primary" />
           )}
         </IconButton>
-      </Container>
-      <Drawer
-        anchor="right"
-        open={isControls}
-        onClose={() => setIsControls(false)}
-      >
-        <Button onClick={() => setIsControls(false)}>X</Button>
-        <Container>
-          <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid xs={8}>
-              <Slider
-                value={speed}
-                onChange={handleSpeedSlider}
-                min={10}
-                max={1000}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-        {/* Speed and Size */}
-        <Container>
-          <div>Number of inputs to sort</div>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid xs={8}>
-              <Slider
-                value={size}
-                onChange={handleSizeSlider}
-                min={10}
-                max={100}
-              />
-            </Grid>
-            <Grid xs={4}>
-              <Input
-                style={{ border: '1px solid black' }}
-                value={size}
-                size="small"
-                onChange={handleSizeInput}
-                onBlur={handleBlur}
-                inputProps={{
-                  min: 10,
-                  max: 100,
-                  step: 10,
-                  type: 'number',
-                }}
-              />
-            </Grid>
-          </Grid>
-        </Container>
-        {/* Filter sorts */}
-        <Stack direction="row" spacing={1}>
-          <Chip
-            onClick={() => {
-              if (active.indexOf('insertion') >= 0) {
-                setActive([...active].filter((elem) => elem != 'insertion'));
-              } else {
-                setActive([...active, 'insertion']);
-              }
-            }}
-            variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
-            label="Insertion Sort"
-            color="secondary"
-            size="small"
-          />
-          <Chip
-            onClick={() => {
-              if (active.indexOf('selection') >= 0) {
-                setActive([...active].filter((elem) => elem != 'selection'));
-              } else {
-                setActive([...active, 'selection']);
-              }
-            }}
-            variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
-            label="Selection Sort"
-            color="secondary"
-            size="small"
-          />
-          <Chip
-            onClick={() => {
-              if (active.indexOf('bubble') >= 0) {
-                setActive([...active].filter((elem) => elem != 'bubble'));
-              } else {
-                setActive([...active, 'bubble']);
-              }
-            }}
-            variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
-            label="Bubble Sort"
-            color="secondary"
-            size="small"
-          />
-          <Chip
-            onClick={() => {
-              if (active.indexOf('merge') >= 0) {
-                setActive([...active].filter((elem) => elem != 'merge'));
-              } else {
-                setActive([...active, 'merge']);
-              }
-            }}
-            variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
-            label="Merge Sort"
-            color="secondary"
-            size="small"
-          />
-        </Stack>
-        {/* Type of chart */}
-        <FormControl>
-          <FormLabel id="chart-type-radio-form">Chart Type</FormLabel>
-          <RadioGroup
-            aria-labelledby="chart-type-radio-form"
-            defaultValue="Random"
-            name="radio-buttons-group"
-          >
-            <FormControlLabel
-              value="random"
-              control={<Radio />}
-              label="Random"
-              onChange={(e) => setChartType(e.target.value)}
-            />
-            <FormControlLabel
-              value="valley"
-              control={<Radio />}
-              label="Valley"
-              onChange={(e) => setChartType(e.target.value)}
-            />
-            <FormControlLabel
-              value="pyramid"
-              control={<Radio />}
-              label="Pyramid"
-              onChange={(e) => setChartType(e.target.value)}
-            />
-            <FormControlLabel
-              value="reverse"
-              control={<Radio />}
-              label="Reverse"
-              onChange={(e) => setChartType(e.target.value)}
-            />
-          </RadioGroup>
-        </FormControl>
-      </Drawer>
+      </div>
+
       <Grid container rowSpacing={1} columnSpacing={3}>
         {active.length
           ? active.map((str, i) => {
@@ -328,7 +180,7 @@ const SortMain = () => {
                 case 'insertion':
                   return (
                     <Grid xs={8} md={6} key={`insertionSort: ${i}`}>
-                      <Paper>
+                      <Paper elevation={3}>
                         <InsertionSort Chart={Chart} speed={speed} />
                       </Paper>
                     </Grid>
