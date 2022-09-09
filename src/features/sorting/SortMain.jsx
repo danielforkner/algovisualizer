@@ -28,8 +28,15 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
+  IconButton,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PlayCircleFilledOutlinedIcon from '@mui/icons-material/PlayCircleFilledOutlined';
+import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
+import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
+import SyncDisabledOutlinedIcon from '@mui/icons-material/SyncDisabledOutlined';
 
 const SortMain = () => {
   Chart.register(...registerables);
@@ -143,9 +150,39 @@ const SortMain = () => {
 
   return (
     <div>
-      <Button onClick={toggleControls}>Controls</Button>
-      <Button onClick={handleSort}>Start Sorting</Button>
-      <Button onClick={handleRefresh}>Refresh</Button>
+      <Container>
+        <IconButton aria-label="sort">
+          {sorting ? (
+            <HourglassEmptyOutlinedIcon fontSize="large" />
+          ) : (
+            <PlayCircleFilledOutlinedIcon
+              onClick={handleSort}
+              color="secondary"
+              fontSize="large"
+            />
+          )}
+        </IconButton>
+        <IconButton aria-label="settings">
+          {sorting ? (
+            <SettingsOutlinedIcon fontSize="large" color="primary" />
+          ) : isControls ? (
+            <SettingsOutlinedIcon fontSize="large" color="primary" />
+          ) : (
+            <SettingsIcon
+              fontSize="large"
+              color="primary"
+              onClick={toggleControls}
+            />
+          )}
+        </IconButton>
+        <IconButton aria-label="refresh-chart">
+          {sorting ? (
+            <SyncDisabledOutlinedIcon fontSize="large" color="primary" />
+          ) : (
+            <SyncOutlinedIcon fontSize="large" color="primary" />
+          )}
+        </IconButton>
+      </Container>
       <Drawer
         anchor="right"
         open={isControls}
