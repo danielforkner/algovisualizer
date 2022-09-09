@@ -8,6 +8,7 @@ for (let i = 0; i < 50; i++) {
 const initialState = {
   grid,
   sorting: false,
+  size: 50,
 };
 
 export const sortingSlice = createSlice({
@@ -23,9 +24,13 @@ export const sortingSlice = createSlice({
     setSorting: (state, action) => {
       state.sorting = action.payload;
     },
+    setSize: (state, action) => {
+      state.size = action.payload;
+    },
   },
 });
 
-export const { refreshGrid, toggleSorting, setSorting } = sortingSlice.actions;
+export const { refreshGrid, toggleSorting, setSorting, setSize } =
+  sortingSlice.actions;
 
 export default sortingSlice.reducer;
