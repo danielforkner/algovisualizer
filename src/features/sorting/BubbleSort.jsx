@@ -139,7 +139,7 @@ const BubbleSort = ({ speed, Chart }) => {
 
   return (
     <div>
-      <h1>Bubble Sort</h1>
+      <h2>Bubble Sort</h2>
       <canvas id="bubbleChart"></canvas>
       <div className="end-time">
         {endTime

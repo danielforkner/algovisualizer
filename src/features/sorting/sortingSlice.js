@@ -12,7 +12,7 @@ const initialState = {
   size: 50,
   speed: 20,
   colors: {
-    barColor: 'rgba(201, 203, 207, 1)',
+    barColor: 'rgba(0, 0, 0, 1)',
     pointerColor: 'rgba(140, 255, 125, 1)',
     completeColor: 'rgba(140, 255, 125, 1)',
     selectedColor: 'rgba(125, 233, 140, 1)',

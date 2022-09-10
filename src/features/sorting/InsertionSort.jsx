@@ -145,8 +145,8 @@ const InsertionSort = ({ speed, Chart }) => {
   }
 
   return (
-    <div>
-      <h1>Insertion Sort</h1>
+    <>
+      <h2>Insertion Sort</h2>
       <canvas id="insertionChart"></canvas>
       <div className="end-time">
         {endTime
@@ -156,7 +156,7 @@ const InsertionSort = ({ speed, Chart }) => {
             ).toFixed(3)}s`
           : null}
       </div>
-    </div>
+    </>
   );
 };
 

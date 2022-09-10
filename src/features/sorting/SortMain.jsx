@@ -5,30 +5,10 @@ import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  refreshGrid,
-  setSize,
-  setSorting,
-  setSpeed,
-  updateActiveSorting,
-} from './sortingSlice';
+import { refreshGrid, setSorting, updateActiveSorting } from './sortingSlice';
 import './styles/sortStyles.css';
-import {
-  Chip,
-  Paper,
-  Stack,
-  Slider,
-  Input,
-  Container,
-  Drawer,
-  Button,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  IconButton,
-} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -173,15 +153,17 @@ const SortMain = () => {
         </IconButton>
       </div>
 
-      <Grid container rowSpacing={1} columnSpacing={3}>
+      <Grid style={{ width: '80%' }} container columnSpacing={{ xs: 0, sm: 2 }}>
         {active.length
           ? active.map((str, i) => {
               switch (str) {
                 case 'insertion':
                   return (
                     <Grid xs={8} md={6} key={`insertionSort: ${i}`}>
-                      <Paper elevation={3}>
-                        <InsertionSort Chart={Chart} speed={speed} />
+                      <Paper elevation={3} padding={5}>
+                        <div style={{ padding: '0 10px' }}>
+                          <InsertionSort Chart={Chart} speed={speed} />
+                        </div>
                       </Paper>
                     </Grid>
                   );
@@ -189,7 +171,9 @@ const SortMain = () => {
                   return (
                     <Grid xs={8} md={6} key={`selectionSort: ${i}`}>
                       <Paper>
-                        <SelectionSort Chart={Chart} speed={speed} />
+                        <div style={{ padding: '0 10px' }}>
+                          <SelectionSort Chart={Chart} speed={speed} />
+                        </div>
                       </Paper>
                     </Grid>
                   );
@@ -197,7 +181,9 @@ const SortMain = () => {
                   return (
                     <Grid xs={8} md={6} key={`bubbleSort: ${i}`}>
                       <Paper>
-                        <BubbleSort Chart={Chart} speed={speed} />
+                        <div style={{ padding: '0 10px' }}>
+                          <BubbleSort Chart={Chart} speed={speed} />
+                        </div>
                       </Paper>
                     </Grid>
                   );
@@ -205,7 +191,9 @@ const SortMain = () => {
                   return (
                     <Grid xs={8} md={6} key={`mergeSort: ${i}`}>
                       <Paper>
-                        <MergeSort Chart={Chart} speed={speed} />
+                        <div style={{ padding: '0 10px' }}>
+                          <MergeSort Chart={Chart} speed={speed} />
+                        </div>
                       </Paper>
                     </Grid>
                   );

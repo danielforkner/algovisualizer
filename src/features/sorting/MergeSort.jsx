@@ -93,14 +93,6 @@ const MergeSort = ({ speed, Chart }) => {
     }
   }, [grid, ctx, backgroundColors]);
 
-  const updateChartColors = (array, color, idx) => {
-    let replace = array.indexOf(color);
-    const newArray = [...array];
-    if (replace >= 0) newArray[replace] = barColor;
-    newArray[idx] = color;
-    return newArray;
-  };
-
   async function mergeSort(array, start, end) {
     if (start < end) {
       let mid = Math.floor((start + end) / 2);
@@ -141,8 +133,6 @@ const MergeSort = ({ speed, Chart }) => {
           newArray[idx] = sortedColor;
           return newArray;
         });
-        // select(pointer).classList.remove('left', 'right');
-        // select(pointer).classList.add(start % 2 === 0 ? 'left' : 'right');
       } else {
         array[pointer] = rightArr[rightIdx++];
         setBackgroundcolors((backgroundColors) => {
@@ -150,16 +140,12 @@ const MergeSort = ({ speed, Chart }) => {
           newArray[idx] = sortedColor;
           return newArray;
         });
-        // select(pointer).classList.remove('left', 'right');
-        // select(pointer).classList.add(start % 2 === 0 ? 'left' : 'right');
       }
       pointer++;
     }
 
     while (leftIdx < leftLen) {
       let idx = pointer;
-      // select(pointer).classList.remove('left', 'right');
-      // select(pointer).classList.add(start % 2 === 0 ? 'left' : 'right');
       setBackgroundcolors((backgroundColors) => {
         const newArray = [...backgroundColors];
         newArray[idx] = sortedColor;
@@ -169,8 +155,6 @@ const MergeSort = ({ speed, Chart }) => {
     }
     while (rightIdx < rightLen) {
       let idx = pointer;
-      // select(pointer).classList.add('left', 'right');
-      // select(pointer).classList.add(start % 2 === 0 ? 'left' : 'right');
       setBackgroundcolors((backgroundColors) => {
         const newArray = [...backgroundColors];
         newArray[idx] = sortedColor;
@@ -196,21 +180,8 @@ const MergeSort = ({ speed, Chart }) => {
 
   return (
     <div>
-      <h1>Merge Sort</h1>
+      <h2>Merge Sort</h2>
       <canvas id="mergeChart"></canvas>
-      {/* <div className="grid-container">
-        {grid.map((elem, idx) => {
-          return (
-            <div
-              className="cell"
-              id={`mergesort:${idx}`}
-              key={`mergesort:${idx}`}
-            >
-              {elem}
-            </div>
-          );
-        })}
-      </div> */}
       <div className="end-time">
         {endTime
           ? `Time to sort: ${(

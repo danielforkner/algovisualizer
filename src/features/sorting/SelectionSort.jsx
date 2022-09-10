@@ -119,26 +119,17 @@ const SelectionSort = ({ speed, Chart }) => {
         setBackgroundcolors((backgroundColors) =>
           updateChartColors(backgroundColors, pointerColor_j, j)
         );
-        // select(j).classList.add('pointer-j');
         await wait(speed);
         setWaitCount((waitCount) => (waitCount += 1));
         if (grid[j] < grid[min]) {
-          // select(min).classList.remove('minimum');
           min = j;
           setBackgroundcolors((backgroundColors) =>
             updateChartColors(backgroundColors, minimumColor, j)
           );
-          // select(min).classList.add('minimum');
         }
-        // select(j).classList.remove('pointer-j');
       }
-      // select(i).classList.add('sorted');
       swap(i, min, grid);
       setGrid([...grid]);
-      // await wait(speed);
-      // setWaitCount((waitCount) => (waitCount += 1));
-      // select(min).classList.remove('minimum');
-      // select(i).classList.remove('pointer-i');
     }
     // finished sorting
     setEndTime(Date.now());
@@ -153,7 +144,7 @@ const SelectionSort = ({ speed, Chart }) => {
 
   return (
     <div>
-      <h1>Selection Sort</h1>
+      <h2>Selection Sort</h2>
       <canvas id="selectionChart"></canvas>
       <div className="end-time">
         {endTime

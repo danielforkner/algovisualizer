@@ -1,3 +1,4 @@
+import { Paper } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { wait } from '../sorting/helpers';
 
@@ -8,7 +9,10 @@ export default function BinaryTree() {
   const [numNodes, setNumNodes] = useState(25);
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState([
+    53, 64, 38, 82, 85, 21, 82, 95, 51, 65, 8, 54, 88, 43, 28, 2, 8, 27, 68, 53,
+    30, 49, 26, 79, 86, 32,
+  ]);
 
   useEffect(() => {
     setC(document.getElementById('canvas'));
@@ -153,14 +157,16 @@ export default function BinaryTree() {
           );
         })}
       </div>
-      <canvas
-        id="canvas"
-        width={canvasWidth}
-        height={canvasHeight}
-        // style={{ backgroundColor: 'white' }}
-      >
-        Your browser does not support this content
-      </canvas>
+      <Paper>
+        <canvas
+          id="canvas"
+          width={canvasWidth}
+          height={canvasHeight}
+          // style={{ backgroundColor: 'white' }}
+        >
+          Your browser does not support this content
+        </canvas>
+      </Paper>
     </div>
   );
 }
