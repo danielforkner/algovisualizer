@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { wait } from './helpers';
+import { updateActiveSorting } from './sortingSlice';
 import './styles/mergeSort.css';
 
 const MergeSort = ({ speed, Chart }) => {
@@ -13,14 +14,15 @@ const MergeSort = ({ speed, Chart }) => {
   const select = (idx) => document.getElementById(`mergesort:${idx}`);
   const mainGrid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
+  const dispatch = useDispatch();
   // chart
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
   const [currentChart, setCurrentChart] = useState(null);
   const [backgroundColors, setBackgroundcolors] = useState([]);
-  const barColor = 'rgba(201, 203, 207, 1)';
-  const sortedColor = 'rgba(140, 140, 125, 1)';
-  const completeColor = 'rgba(140, 255, 125, 1)';
+  const { completeColor, barColor, sortedColor } = useSelector(
+    (state) => state.sorting.colors
+  );
 
   // get canvas from DOM
   useEffect(() => {
@@ -184,6 +186,7 @@ const MergeSort = ({ speed, Chart }) => {
     await mergeSort([...grid], 0, grid.length - 1);
     setEndTime(Date.now());
     // finished sorting
+    dispatch(updateActiveSorting(-1));
     for (let i = 0; i < grid.length; i++) {
       setBackgroundcolors((backgroundColors) => {
         return ([...backgroundColors][i] = completeColor);

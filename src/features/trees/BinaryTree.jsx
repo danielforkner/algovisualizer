@@ -45,7 +45,7 @@ export default function BinaryTree() {
       this.rootRadius = 20; // starting node size on canvas
     }
     async depthFirstSearch(node, target) {}
-    async breadthFirstSearch() {}
+    async breadthFirstSearch(node, target) {}
     async insertRoot(value) {
       this.root = new Node({
         value,

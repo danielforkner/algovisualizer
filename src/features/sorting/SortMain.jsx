@@ -1,42 +1,81 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { wait } from './helpers';
 import InsertionSort from './InsertionSort';
 import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
 import { useDispatch, useSelector } from 'react-redux';
-import { refreshGrid, setSorting, toggleSorting } from './sortingSlice';
+import {
+  refreshGrid,
+  setSize,
+  setSorting,
+  setSpeed,
+  updateActiveSorting,
+} from './sortingSlice';
 import './styles/sortStyles.css';
+import {
+  Chip,
+  Paper,
+  Stack,
+  Slider,
+  Input,
+  Container,
+  Drawer,
+  Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  IconButton,
+} from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PlayCircleFilledOutlinedIcon from '@mui/icons-material/PlayCircleFilledOutlined';
+import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
+import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
+import SyncDisabledOutlinedIcon from '@mui/icons-material/SyncDisabledOutlined';
+import SortSettings from './SortSettings';
 
 const SortMain = () => {
   Chart.register(...registerables);
+  const [active, setActive] = useState([
+    'insertion',
+    'selection',
+    'bubble',
+    'merge',
+  ]);
+
   const grid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
+  const size = useSelector((state) => state.sorting.size);
+  const speed = useSelector((state) => state.sorting.speed);
+  const activeSorting = useSelector((state) => state.sorting.activeSorting);
   const dispatch = useDispatch();
-  const [speed, setSpeed] = useState(500);
+  const [isControls, setIsControls] = useState(false);
+  const [chartType, setChartType] = useState('random');
 
-  const refresh = () => {
+  const refreshRandom = () => {
     let arr = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < size; i++) {
       arr.push(Math.floor(Math.random() * 100));
     }
     dispatch(refreshGrid(arr));
   };
 
-  const refreshBackwards = () => {
+  const refreshReverse = () => {
     let arr = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < size; i++) {
       arr.unshift(i);
     }
-    console.log('new grid: ', arr);
     dispatch(refreshGrid(arr));
   };
 
-  const refreshAlternate = () => {
+  const refreshValley = () => {
     let arr = [];
     let count = 0;
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < size; i++) {
       if (count % 2 === 0) {
         arr.unshift(i);
       } else {
@@ -50,7 +89,7 @@ const SortMain = () => {
   const refreshPyramid = () => {
     let arr = [];
     let count = 0;
-    for (let i = 50; i > 0; i--) {
+    for (let i = size; i > 0; i--) {
       if (count % 2 === 0) {
         arr.unshift(i);
       } else {
@@ -61,51 +100,121 @@ const SortMain = () => {
     dispatch(refreshGrid(arr));
   };
 
-  const handleSort = async () => {
-    dispatch(setSorting(true));
-    await wait(50);
-    dispatch(toggleSorting());
+  const handleRefresh = () => {
+    if (sorting) return;
+    switch (chartType) {
+      case 'random':
+        refreshRandom();
+        return;
+      case 'reverse':
+        refreshReverse();
+        return;
+      case 'valley':
+        refreshValley();
+        return;
+      case 'pyramid':
+        refreshPyramid();
+        return;
+      default:
+        return;
+    }
   };
+
+  const handleSort = async () => {
+    if (sorting) return;
+    dispatch(updateActiveSorting(active.length));
+    dispatch(setSorting(true));
+  };
+
+  const toggleControls = () => {
+    if (sorting) return;
+    setIsControls(!isControls);
+  };
+
+  useEffect(() => {
+    if (activeSorting <= 0) {
+      dispatch(setSorting(false));
+    }
+  }, [activeSorting]);
 
   return (
     <div>
+      <SortSettings
+        active={active}
+        setActive={setActive}
+        isControls={isControls}
+        setIsControls={setIsControls}
+        setChartType={setChartType}
+        handleRefresh={handleRefresh}
+      />
       <div className="container">
-        <div>Speed: </div>
-        <input
-          type="range"
-          min="75"
-          max="1000"
-          style={{ direction: 'rtl' }}
-          value={speed}
-          className="speedSlider"
-          onChange={(e) => setSpeed(e.target.value)}
-        />
-        <div>{speed > 650 ? 'Slow' : speed > 400 ? 'Medium' : 'Fast'}</div>
+        <IconButton onClick={handleSort} aria-label="sort">
+          {sorting ? (
+            <HourglassEmptyOutlinedIcon fontSize="large" />
+          ) : (
+            <PlayCircleFilledOutlinedIcon color="secondary" fontSize="large" />
+          )}
+        </IconButton>
+        <IconButton onClick={toggleControls} aria-label="settings">
+          {sorting ? (
+            <SettingsOutlinedIcon fontSize="large" />
+          ) : isControls ? (
+            <SettingsOutlinedIcon fontSize="large" />
+          ) : (
+            <SettingsIcon fontSize="large" color="primary" />
+          )}
+        </IconButton>
+        <IconButton onClick={handleRefresh} aria-label="refresh-chart">
+          {sorting ? (
+            <SyncDisabledOutlinedIcon fontSize="large" />
+          ) : (
+            <SyncOutlinedIcon fontSize="large" color="primary" />
+          )}
+        </IconButton>
       </div>
-      <button onClick={handleSort}>Start Sorting</button>
-      <button onClick={refresh}>Generate Random List</button>
-      <button onClick={refreshAlternate}>Generate an Inverted Pyramid</button>
-      <button onClick={refreshPyramid}>Generate a Pyramid</button>
-      <button onClick={refreshBackwards}>Generate Backwards List</button>
-      <div className="grid-container">
-        {grid.map((elem, idx) => {
-          return (
-            <div
-              className="cell"
-              id={`sortingGrid:${idx}`}
-              key={`sortingGrid:${idx}`}
-            >
-              {elem}
-            </div>
-          );
-        })}
-      </div>
-      <div id="grid-display">
-        <InsertionSort Chart={Chart} speed={speed} />
-        <SelectionSort Chart={Chart} speed={speed} />
-        <BubbleSort Chart={Chart} speed={speed} />
-        <MergeSort Chart={Chart} speed={speed} />
-      </div>
+
+      <Grid container rowSpacing={1} columnSpacing={3}>
+        {active.length
+          ? active.map((str, i) => {
+              switch (str) {
+                case 'insertion':
+                  return (
+                    <Grid xs={8} md={6} key={`insertionSort: ${i}`}>
+                      <Paper elevation={3}>
+                        <InsertionSort Chart={Chart} speed={speed} />
+                      </Paper>
+                    </Grid>
+                  );
+                case 'selection':
+                  return (
+                    <Grid xs={8} md={6} key={`selectionSort: ${i}`}>
+                      <Paper>
+                        <SelectionSort Chart={Chart} speed={speed} />
+                      </Paper>
+                    </Grid>
+                  );
+                case 'bubble':
+                  return (
+                    <Grid xs={8} md={6} key={`bubbleSort: ${i}`}>
+                      <Paper>
+                        <BubbleSort Chart={Chart} speed={speed} />
+                      </Paper>
+                    </Grid>
+                  );
+                case 'merge':
+                  return (
+                    <Grid xs={8} md={6} key={`mergeSort: ${i}`}>
+                      <Paper>
+                        <MergeSort Chart={Chart} speed={speed} />
+                      </Paper>
+                    </Grid>
+                  );
+                default:
+                  return null;
+              }
+            })
+          : null}
+      </Grid>
     </div>
   );
 };
