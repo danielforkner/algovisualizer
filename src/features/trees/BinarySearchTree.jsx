@@ -4,11 +4,13 @@ import { wait } from './helpers';
 export default function BinarySearchTree() {
   const [canvasWidth, setCanvasWidth] = useState(500);
   const [canvasHeight, setCanvasHeight] = useState(500);
-  const [speed, setSpeed] = useState(500);
+  const [speed, setSpeed] = useState(40);
   const [numNodes, setNumNodes] = useState(25);
+  const [tree, setTree] = useState(null);
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
-  const [values, setValues] = useState([3, 1, 6, 4, 7, 10, 14, 13]);
+  const [values, setValues] = useState([3, 1, 6, 4, 7, 10, 14, 13, 12]);
+  const [target, setTarget] = useState(4);
   // edge cases to account for: duplicate numbers (ignore them)
 
   useEffect(() => {
@@ -26,12 +28,19 @@ export default function BinarySearchTree() {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   };
   const handleDraw = async () => {
-    let tree = new BinarySearchTree();
+    const newTree = new BinarySearchTree();
+    setTree(newTree);
     const root = 8;
-    await tree.insertRoot(root);
+    await newTree.insertRoot(root);
     for (let i = 0; i < values.length; i++) {
-      await tree.insertNode(values[i]);
+      await newTree.insertNode(values[i]);
     }
+    await newTree.depthFirstSearch(newTree.root, target);
+  };
+
+  const handleDepthFirstSearch = async () => {
+    console.log(tree);
+    await tree.depthFirstSearch(tree.root, target);
   };
 
   const drawNode = (x, y, r, text) => {
@@ -42,6 +51,26 @@ export default function BinarySearchTree() {
     ctx.closePath();
     ctx.strokeText(text, x, y);
   };
+  const drawRedNode = (x, y, r, text) => {
+    ctx.beginPath();
+    ctx.fillStyle = 'red';
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = 'white';
+  };
+  const drawGreenNode = (x, y, r, text) => {
+    ctx.beginPath();
+    ctx.fillStyle = 'green';
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = 'white';
+  };
   class BinarySearchTree {
     constructor() {
       this.root = null;
@@ -51,7 +80,22 @@ export default function BinarySearchTree() {
       this.nodeYOffset = 60; // how far apart nodes are Y
       this.rootRadius = 20; // starting node size on canvas
     }
-    async depthFirstSearch(node, target) {}
+    async depthFirstSearch(node = this.root, target) {
+      if (node.value === target) {
+        // DRAW GREEN NODE
+        drawGreenNode(node.x, node.y, node.radius, node.value);
+        await wait(speed * 10);
+        return target;
+      }
+      // DRAW RED NODE
+      drawRedNode(node.x, node.y, node.radius, node.value);
+      await wait(speed * 10);
+      if (node.isLeaf()) {
+        return;
+      }
+      if (node.left) await this.depthFirstSearch(node.left, target);
+      if (node.right) await this.depthFirstSearch(node.right, target);
+    }
     async breadthFirstSearch(node, target) {}
     async insertRoot(value) {
       this.root = new Node({
@@ -121,9 +165,10 @@ export default function BinarySearchTree() {
 
   return (
     <div>
-      <h2>Binary Search Tree</h2>
       <button onClick={handleDraw}>Draw</button>
+      <button onClick={handleDepthFirstSearch}>Search</button>
       <button onClick={handleClear}>Clear</button>
+      <h2>Binary Search Tree</h2>
       <canvas
         id="bstCanvas"
         width={canvasWidth}

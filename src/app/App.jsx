@@ -16,7 +16,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="sorting" element={<SortMain />} />
           <Route path="trees" element={<TreesMain />}>
-            <Route index element={<BinaryTree />} />
+            <Route index element={<BinarySearchTree />} />
             <Route path="binarytree" element={<BinaryTree />} />
             <Route path="binarysearchtree" element={<BinarySearchTree />} />
             <Route

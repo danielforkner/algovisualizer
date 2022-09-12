@@ -6,14 +6,14 @@ export default function TreesMain() {
     <div>
       <h1>Tree Traversal</h1>
       <div className="links">
-        <NavLink
+        {/* <NavLink
           to="binarytree"
           className={({ isActive }) =>
             isActive ? 'activeTreeLink' : 'inactiveTreeLink'
           }
         >
           Binary Trees
-        </NavLink>
+        </NavLink> */}
         <NavLink
           to="binarysearchtree"
           className={({ isActive }) =>
