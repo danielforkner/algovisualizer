@@ -11,7 +11,6 @@ const MergeSort = ({ speed, Chart }) => {
   const [endTime, setEndTime] = useState(0);
   const [waitCount, setWaitCount] = useState(0);
   // store
-  const select = (idx) => document.getElementById(`mergesort:${idx}`);
   const mainGrid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
   const dispatch = useDispatch();
@@ -37,7 +36,6 @@ const MergeSort = ({ speed, Chart }) => {
     const buildGrid = async () => {
       setBackgroundcolors([]);
       let array = [];
-      if (select(0)) select(0).className = 'cell'; // without this the first cell retains the classnames(?)
       for (let i = 0; i < mainGrid.length; i++) {
         array.push(mainGrid[i]);
         setBackgroundcolors((backgroundColors) => [
@@ -93,6 +91,7 @@ const MergeSort = ({ speed, Chart }) => {
     }
   }, [grid, ctx, backgroundColors]);
 
+  // sort
   async function mergeSort(array, start, end) {
     if (start < end) {
       let mid = Math.floor((start + end) / 2);

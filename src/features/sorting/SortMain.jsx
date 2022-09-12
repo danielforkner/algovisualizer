@@ -17,6 +17,7 @@ import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlin
 import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
 import SyncDisabledOutlinedIcon from '@mui/icons-material/SyncDisabledOutlined';
 import SortSettings from './SortSettings';
+import QuickSort from './QuickSort';
 
 const SortMain = () => {
   Chart.register(...registerables);
@@ -25,9 +26,9 @@ const SortMain = () => {
     'selection',
     'bubble',
     'merge',
+    'quick',
   ]);
 
-  const grid = useSelector((state) => state.sorting.grid);
   const sorting = useSelector((state) => state.sorting.sorting);
   const size = useSelector((state) => state.sorting.size);
   const speed = useSelector((state) => state.sorting.speed);
@@ -193,6 +194,16 @@ const SortMain = () => {
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <MergeSort Chart={Chart} speed={speed} />
+                        </div>
+                      </Paper>
+                    </Grid>
+                  );
+                case 'quick':
+                  return (
+                    <Grid xs={8} md={6} key={`quickSort: ${i}`}>
+                      <Paper>
+                        <div style={{ padding: '0 10px' }}>
+                          <QuickSort Chart={Chart} />
                         </div>
                       </Paper>
                     </Grid>
