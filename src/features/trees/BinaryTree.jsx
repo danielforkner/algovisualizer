@@ -26,7 +26,6 @@ export default function BinaryTree() {
   }, [c, ctx]);
 
   const drawNode = (x, y, r, text) => {
-    console.log(x, y, r, text);
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
@@ -72,8 +71,7 @@ export default function BinaryTree() {
     }
     async insertNode(value, parentNode, level = 0) {
       let curr;
-      if (!parentNode) curr = this.root;
-      else curr = parentNode;
+      curr = parentNode || this.root;
       level += this.levelIncrement;
       if (value === curr.value) return;
       if (value > curr.value) {
@@ -146,16 +144,14 @@ export default function BinaryTree() {
           );
         })}
       </div>
-      <Paper>
-        <canvas
-          id="canvas"
-          width={canvasWidth}
-          height={canvasHeight}
-          // style={{ backgroundColor: 'white' }}
-        >
-          Your browser does not support this content
-        </canvas>
-      </Paper>
+      <canvas
+        id="canvas"
+        width={canvasWidth}
+        height={canvasHeight}
+        style={{ backgroundColor: 'white' }}
+      >
+        Your browser does not support this content
+      </canvas>
     </div>
   );
 }
