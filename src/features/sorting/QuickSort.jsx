@@ -19,9 +19,34 @@ export default function QuickSort({ Chart }) {
   const [ctx, setCtx] = useState(null);
   const [currentChart, setCurrentChart] = useState(null);
   const [backgroundColors, setBackgroundcolors] = useState([]);
-  const { completeColor, barColor, sortedColor } = useSelector(
-    (state) => state.sorting.colors
-  );
+  const {
+    completeColor,
+    barColor,
+    pointerColor,
+    pointerColor_i,
+    pointerColor_j,
+  } = useSelector((state) => state.sorting.colors);
+  const data = {
+    labels: [...grid.keys()],
+    datasets: [
+      {
+        data: grid,
+        backgroundColor: backgroundColors,
+        labels: false,
+      },
+    ],
+  };
+  const config = {
+    type: 'bar',
+    data,
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+  };
 
   // get canvas from DOM
   useEffect(() => {
@@ -51,32 +76,11 @@ export default function QuickSort({ Chart }) {
   }, [mainGrid]);
 
   useEffect(() => {
-    if (sorting) sort(grid, 0, grid.length - 1);
+    if (sorting) sort();
   }, [sorting]);
 
   // create chart
   useEffect(() => {
-    const data = {
-      labels: [...grid.keys()],
-      datasets: [
-        {
-          data: grid,
-          backgroundColor: backgroundColors,
-          labels: false,
-        },
-      ],
-    };
-    const config = {
-      type: 'bar',
-      data,
-      options: {
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-      },
-    };
     const buildChart = () => {
       if (currentChart) currentChart.destroy();
       const chart = new Chart(ctx, config);
@@ -91,30 +95,48 @@ export default function QuickSort({ Chart }) {
     }
   }, [grid, ctx, backgroundColors]);
 
-  // sort
-  const sort = async () => {
-    const quickSort = async (array, start, end) => {
-      if (start < end) {
-        const pivot = await sortPivot(array, start, end);
-        sort(array, start, pivot - 1);
-        sort(array, pivot + 1, end);
-      }
-      setGrid([...array]);
-    };
-    await quickSort(grid, 0, grid.length - 1);
+  const updateChartColors = (array, color, idx) => {
+    let replace = array.indexOf(color);
+    const newArray = [...array];
+    if (replace >= 0) newArray[replace] = barColor;
+    newArray[idx] = color;
+    return newArray;
+  };
 
+  // sort
+  async function sort() {
+    setStartTime(Date.now());
+    setWaitCount(() => 0);
+    await quickSort(grid, 0, grid.length - 1);
+    // finished sorting
+    setEndTime(Date.now());
     dispatch(updateActiveSorting(-1));
     for (let i = 0; i < grid.length; i++) {
+      await wait(40);
       setBackgroundcolors((backgroundColors) => {
         return ([...backgroundColors][i] = completeColor);
       });
     }
+  }
+
+  const quickSort = async (array, start, end) => {
+    if (start < end) {
+      const pivot = await sortPivot(array, start, end);
+      await quickSort(array, start, pivot - 1);
+      await quickSort(array, pivot + 1, end);
+    }
+    setGrid([...array]);
   };
 
   const sortPivot = async (array, start, end) => {
     let pivot = array[end];
     let min = start - 1;
     let i;
+    setBackgroundcolors((backgroundColors) =>
+      updateChartColors(backgroundColors, pointerColor, end)
+    );
+    await wait(speed);
+    setWaitCount((waitCount) => (waitCount += 1));
     for (i = start; i <= end - 1; i++) {
       if (array[i] < pivot) {
         min++;
@@ -125,7 +147,6 @@ export default function QuickSort({ Chart }) {
       }
     }
     swap(end, min + 1, array);
-
     setGrid([...array]);
     await wait(speed);
     setWaitCount((waitCount) => (waitCount += 1));
