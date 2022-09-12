@@ -150,6 +150,19 @@ export default function SortSettings({
           color="secondary"
           size="small"
         />
+        <Chip
+          onClick={() => {
+            if (active.indexOf('quick') >= 0) {
+              setActive([...active].filter((elem) => elem != 'quick'));
+            } else {
+              setActive([...active, 'quick']);
+            }
+          }}
+          variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}
+          label="Quick Sort"
+          color="secondary"
+          size="small"
+        />
       </Stack>
       {/* Type of chart */}
       <FormControl>

@@ -160,7 +160,7 @@ const SortMain = () => {
               switch (str) {
                 case 'insertion':
                   return (
-                    <Grid xs={8} md={6} key={`insertionSort: ${i}`}>
+                    <Grid xs={8} md={4} key={`insertionSort: ${i}`}>
                       <Paper elevation={3} padding={5}>
                         <div style={{ padding: '0 10px' }}>
                           <InsertionSort Chart={Chart} speed={speed} />
@@ -170,7 +170,7 @@ const SortMain = () => {
                   );
                 case 'selection':
                   return (
-                    <Grid xs={8} md={6} key={`selectionSort: ${i}`}>
+                    <Grid xs={8} md={4} key={`selectionSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <SelectionSort Chart={Chart} speed={speed} />
@@ -180,7 +180,7 @@ const SortMain = () => {
                   );
                 case 'bubble':
                   return (
-                    <Grid xs={8} md={6} key={`bubbleSort: ${i}`}>
+                    <Grid xs={8} md={4} key={`bubbleSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <BubbleSort Chart={Chart} speed={speed} />
@@ -190,7 +190,7 @@ const SortMain = () => {
                   );
                 case 'merge':
                   return (
-                    <Grid xs={8} md={6} key={`mergeSort: ${i}`}>
+                    <Grid xs={8} md={4} key={`mergeSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <MergeSort Chart={Chart} speed={speed} />
@@ -200,7 +200,7 @@ const SortMain = () => {
                   );
                 case 'quick':
                   return (
-                    <Grid xs={8} md={6} key={`quickSort: ${i}`}>
+                    <Grid xs={8} md={4} key={`quickSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <QuickSort Chart={Chart} />
