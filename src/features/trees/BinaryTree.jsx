@@ -25,6 +25,16 @@ export default function BinaryTree() {
     }
   }, [c, ctx]);
 
+  const drawNode = (x, y, r, text) => {
+    console.log(x, y, r, text);
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.closePath();
+    ctx.strokeText(text, x, y);
+  };
+
   class Node {
     constructor(data) {
       this.value = data.value;
@@ -57,12 +67,7 @@ export default function BinaryTree() {
         y: this.rootY,
         radius: this.rootRadius,
       });
-      ctx.beginPath();
-      ctx.arc(this.root.x, this.root.y, this.rootRadius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-      ctx.closePath();
-      ctx.strokeText(value, this.rootX, this.rootY);
+      drawNode(this.rootX, this.rootY, this.rootRadius, value);
       await wait(speed / 2);
     }
     async insertNode(value, parentNode, level = 0) {
@@ -80,18 +85,7 @@ export default function BinaryTree() {
             radius: this.rootRadius - level,
           });
           // node
-          ctx.beginPath();
-          ctx.arc(
-            curr.right.x,
-            curr.right.y,
-            curr.right.radius,
-            0,
-            Math.PI * 2
-          );
-          ctx.fill();
-          ctx.stroke();
-          ctx.closePath();
-          ctx.strokeText(value, curr.right.x, curr.right.y);
+          drawNode(curr.right.x, curr.right.y, curr.right.radius, value);
           // line
           ctx.beginPath();
           ctx.moveTo(curr.x, curr.y + curr.radius);
@@ -110,12 +104,7 @@ export default function BinaryTree() {
             radius: this.rootRadius - level,
           });
           // node
-          ctx.beginPath();
-          ctx.arc(curr.left.x, curr.left.y, curr.left.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.stroke();
-          ctx.closePath();
-          ctx.strokeText(value, curr.left.x, curr.left.y);
+          drawNode(curr.left.x, curr.left.y, curr.left.radius, value);
           // line
           ctx.beginPath();
           ctx.moveTo(curr.x, curr.y + curr.radius);
