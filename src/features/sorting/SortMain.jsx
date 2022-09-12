@@ -154,13 +154,19 @@ const SortMain = () => {
         </IconButton>
       </div>
 
-      <Grid style={{ width: '80%' }} container columnSpacing={{ xs: 0, sm: 2 }}>
+      <Grid container columnSpacing={{ xs: 0, sm: 2 }}>
         {active.length
           ? active.map((str, i) => {
               switch (str) {
                 case 'insertion':
                   return (
-                    <Grid xs={8} md={4} key={`insertionSort: ${i}`}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      key={`insertionSort: ${i}`}
+                    >
                       <Paper elevation={3} padding={5}>
                         <div style={{ padding: '0 10px' }}>
                           <InsertionSort Chart={Chart} speed={speed} />
@@ -170,7 +176,13 @@ const SortMain = () => {
                   );
                 case 'selection':
                   return (
-                    <Grid xs={8} md={4} key={`selectionSort: ${i}`}>
+                    <Grid
+                      item
+                      xs={12}
+                      sm={6}
+                      md={4}
+                      key={`selectionSort: ${i}`}
+                    >
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <SelectionSort Chart={Chart} speed={speed} />
@@ -180,7 +192,7 @@ const SortMain = () => {
                   );
                 case 'bubble':
                   return (
-                    <Grid xs={8} md={4} key={`bubbleSort: ${i}`}>
+                    <Grid item xs={12} sm={6} md={4} key={`bubbleSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <BubbleSort Chart={Chart} speed={speed} />
@@ -190,7 +202,7 @@ const SortMain = () => {
                   );
                 case 'merge':
                   return (
-                    <Grid xs={8} md={4} key={`mergeSort: ${i}`}>
+                    <Grid item xs={12} sm={6} md={4} key={`mergeSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <MergeSort Chart={Chart} speed={speed} />
@@ -200,7 +212,7 @@ const SortMain = () => {
                   );
                 case 'quick':
                   return (
-                    <Grid xs={8} md={4} key={`quickSort: ${i}`}>
+                    <Grid item xs={12} sm={6} md={4} key={`quickSort: ${i}`}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <QuickSort Chart={Chart} />

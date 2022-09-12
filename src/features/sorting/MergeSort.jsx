@@ -169,12 +169,15 @@ const MergeSort = ({ speed, Chart }) => {
     await mergeSort([...grid], 0, grid.length - 1);
     setEndTime(Date.now());
     // finished sorting
-    dispatch(updateActiveSorting(-1));
     for (let i = 0; i < grid.length; i++) {
+      await wait(15);
       setBackgroundcolors((backgroundColors) => {
-        return ([...backgroundColors][i] = completeColor);
+        let array = [...backgroundColors];
+        array[i] = completeColor;
+        return array;
       });
     }
+    dispatch(updateActiveSorting(-1));
   }
 
   return (

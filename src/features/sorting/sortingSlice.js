@@ -13,13 +13,13 @@ const initialState = {
   speed: 20,
   colors: {
     barColor: 'rgba(0, 0, 0, 1)',
-    pointerColor: 'rgba(140, 255, 125, 1)',
-    completeColor: 'rgba(140, 255, 125, 1)',
-    selectedColor: 'rgba(125, 233, 140, 1)',
-    sortedColor: 'rgba(140, 140, 125, 1)',
-    pointerColor_i: 'rgba(140, 255, 125, 1)',
-    pointerColor_j: 'rgba(140, 200, 125, 1)',
-    minimumColor: 'rgba(100, 0, 0, 1)',
+    pointerColor: 'green',
+    completeColor: 'blue',
+    selectedColor: 'orange',
+    sortedColor: 'aqua',
+    pointerColor_i: 'green',
+    pointerColor_j: 'darkgreen',
+    minimumColor: 'red',
   },
 };
 

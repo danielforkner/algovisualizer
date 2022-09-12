@@ -135,13 +135,15 @@ const InsertionSort = ({ speed, Chart }) => {
     }
     // finished sorting
     setEndTime(Date.now());
-    dispatch(updateActiveSorting(-1));
     for (let i = 0; i < grid.length; i++) {
-      await wait(40);
+      await wait(15);
       setBackgroundcolors((backgroundColors) => {
-        return ([...backgroundColors][i] = completeColor);
+        let array = [...backgroundColors];
+        array[i] = completeColor;
+        return array;
       });
     }
+    dispatch(updateActiveSorting(-1));
   }
 
   return (

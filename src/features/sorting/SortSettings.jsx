@@ -57,7 +57,7 @@ export default function SortSettings({
       <Container>
         <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
         <Grid container alignItems="center" spacing={2}>
-          <Grid xs={8}>
+          <Grid item xs={8}>
             <Slider
               value={speed}
               onChange={handleSpeedSlider}
@@ -71,7 +71,7 @@ export default function SortSettings({
       <Container>
         <div>Number of inputs to sort</div>
         <Grid container alignItems="center" spacing={2}>
-          <Grid xs={8}>
+          <Grid item xs={8}>
             <Slider
               value={size}
               onChange={handleSizeSlider}
