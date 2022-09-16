@@ -5,6 +5,7 @@ import Sidebar from '../features/Sidebar';
 import TreesMain from '../features/trees/TreesMain';
 import BinaryTree from '../features/trees/BinaryTree';
 import BinarySearchTree from '../features/trees/BinarySearchTree';
+import ArraysMain from '../features/arrays/ArraysMain';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
               }
             />
           </Route>
+          <Route path="arrays" element={<ArraysMain />} />
           <Route
             path="*"
             element={

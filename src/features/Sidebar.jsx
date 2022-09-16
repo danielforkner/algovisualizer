@@ -34,6 +34,12 @@ export default function Sidebar() {
       >
         Trees
       </NavLink>
+      <NavLink
+        to="arrays"
+        className={({ isActive }) => (isActive ? 'activeLink' : 'inactiveLink')}
+      >
+        Arrays
+      </NavLink>
       {/* </Drawer> */}
     </div>
   );
