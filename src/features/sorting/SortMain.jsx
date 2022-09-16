@@ -1,33 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { refreshGrid, setSorting, updateActiveSorting } from './sortingSlice';
+import './styles/sortStyles.css';
+// components
 import InsertionSort from './InsertionSort';
 import BubbleSort from './BubbleSort';
 import SelectionSort from './SelectionSort';
 import MergeSort from './MergeSort';
-import { useDispatch, useSelector } from 'react-redux';
-import { refreshGrid, setSorting, updateActiveSorting } from './sortingSlice';
-import './styles/sortStyles.css';
-import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Unstable_Grid2';
-import SettingsIcon from '@mui/icons-material/Settings';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import PlayCircleFilledOutlinedIcon from '@mui/icons-material/PlayCircleFilledOutlined';
-import HourglassEmptyOutlinedIcon from '@mui/icons-material/HourglassEmptyOutlined';
-import SyncOutlinedIcon from '@mui/icons-material/SyncOutlined';
-import SyncDisabledOutlinedIcon from '@mui/icons-material/SyncDisabledOutlined';
 import SortSettings from './SortSettings';
 import QuickSort from './QuickSort';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Unstable_Grid2';
+import SortControls from './SortControls';
 
 const SortMain = () => {
   Chart.register(...registerables);
-  const [active, setActive] = useState([
-    'insertion',
-    'selection',
-    'bubble',
-    'merge',
-    'quick',
-  ]);
+  const active = useSelector((state) => state.sorting.active);
 
   const sorting = useSelector((state) => state.sorting.sorting);
   const size = useSelector((state) => state.sorting.size);
@@ -122,36 +111,21 @@ const SortMain = () => {
     <div>
       <SortSettings
         active={active}
-        setActive={setActive}
         isControls={isControls}
         setIsControls={setIsControls}
         setChartType={setChartType}
         handleRefresh={handleRefresh}
       />
       <div className="container">
-        <IconButton onClick={handleSort} aria-label="sort">
-          {sorting ? (
-            <HourglassEmptyOutlinedIcon fontSize="large" />
-          ) : (
-            <PlayCircleFilledOutlinedIcon color="secondary" fontSize="large" />
-          )}
-        </IconButton>
-        <IconButton onClick={toggleControls} aria-label="settings">
-          {sorting ? (
-            <SettingsOutlinedIcon fontSize="large" />
-          ) : isControls ? (
-            <SettingsOutlinedIcon fontSize="large" />
-          ) : (
-            <SettingsIcon fontSize="large" color="primary" />
-          )}
-        </IconButton>
-        <IconButton onClick={handleRefresh} aria-label="refresh-chart">
-          {sorting ? (
-            <SyncDisabledOutlinedIcon fontSize="large" />
-          ) : (
-            <SyncOutlinedIcon fontSize="large" color="primary" />
-          )}
-        </IconButton>
+        <Paper>
+          <SortControls
+            sorting={sorting}
+            toggleControls={toggleControls}
+            handleSort={handleSort}
+            isControls={isControls}
+            handleRefresh={handleRefresh}
+          />
+        </Paper>
       </div>
 
       <Grid container columnSpacing={{ xs: 0, sm: 2 }}>

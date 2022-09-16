@@ -21,6 +21,7 @@ const initialState = {
     pointerColor_j: 'darkgreen',
     minimumColor: 'red',
   },
+  active: ['insertion', 'selection', 'bubble', 'merge', 'quick'],
 };
 
 export const sortingSlice = createSlice({
@@ -45,6 +46,9 @@ export const sortingSlice = createSlice({
     updateActiveSorting: (state, action) => {
       state.activeSorting += action.payload;
     },
+    updateActive: (state, action) => {
+      state.active = action.payload;
+    },
   },
 });
 
@@ -55,6 +59,7 @@ export const {
   setSize,
   setSpeed,
   updateActiveSorting,
+  updateActive,
 } = sortingSlice.actions;
 
 export default sortingSlice.reducer;

@@ -12,11 +12,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSize, setSpeed } from './sortingSlice';
+import { setSize, setSpeed, updateActive } from './sortingSlice';
 
 export default function SortSettings({
-  active,
-  setActive,
   isControls,
   setIsControls,
   setChartType,
@@ -24,6 +22,7 @@ export default function SortSettings({
 }) {
   const speed = useSelector((state) => state.sorting.speed);
   const size = useSelector((state) => state.sorting.size);
+  const active = useSelector((state) => state.sorting.active);
   const dispatch = useDispatch();
 
   const handleSpeedSlider = (event, newValue) => {
@@ -101,9 +100,11 @@ export default function SortSettings({
         <Chip
           onClick={() => {
             if (active.indexOf('insertion') >= 0) {
-              setActive([...active].filter((elem) => elem != 'insertion'));
+              dispatch(
+                updateActive([...active].filter((elem) => elem !== 'insertion'))
+              );
             } else {
-              setActive([...active, 'insertion']);
+              dispatch(updateActive([...active, 'insertion']));
             }
           }}
           variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
@@ -114,9 +115,11 @@ export default function SortSettings({
         <Chip
           onClick={() => {
             if (active.indexOf('selection') >= 0) {
-              setActive([...active].filter((elem) => elem != 'selection'));
+              dispatch(
+                updateActive([...active].filter((elem) => elem !== 'selection'))
+              );
             } else {
-              setActive([...active, 'selection']);
+              dispatch(updateActive([...active, 'selection']));
             }
           }}
           variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
@@ -127,9 +130,11 @@ export default function SortSettings({
         <Chip
           onClick={() => {
             if (active.indexOf('bubble') >= 0) {
-              setActive([...active].filter((elem) => elem != 'bubble'));
+              dispatch(
+                updateActive([...active].filter((elem) => elem !== 'bubble'))
+              );
             } else {
-              setActive([...active, 'bubble']);
+              dispatch(updateActive([...active, 'bubble']));
             }
           }}
           variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
@@ -140,9 +145,11 @@ export default function SortSettings({
         <Chip
           onClick={() => {
             if (active.indexOf('merge') >= 0) {
-              setActive([...active].filter((elem) => elem != 'merge'));
+              dispatch(
+                updateActive([...active].filter((elem) => elem !== 'merge'))
+              );
             } else {
-              setActive([...active, 'merge']);
+              dispatch(updateActive([...active, 'merge']));
             }
           }}
           variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
@@ -153,9 +160,11 @@ export default function SortSettings({
         <Chip
           onClick={() => {
             if (active.indexOf('quick') >= 0) {
-              setActive([...active].filter((elem) => elem != 'quick'));
+              dispatch(
+                updateActive([...active].filter((elem) => elem !== 'quick'))
+              );
             } else {
-              setActive([...active, 'quick']);
+              dispatch(updateActive([...active, 'quick']));
             }
           }}
           variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}

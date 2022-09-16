@@ -10,7 +10,7 @@ export default function BinarySearchTree() {
   const [c, setC] = useState(null);
   const [ctx, setCtx] = useState(null);
   const [values, setValues] = useState([3, 1, 6, 4, 7, 10, 14, 13, 12]);
-  const [target, setTarget] = useState(4);
+  const [target, setTarget] = useState(14);
   // edge cases to account for: duplicate numbers (ignore them)
 
   useEffect(() => {
@@ -21,12 +21,14 @@ export default function BinarySearchTree() {
     if (ctx) {
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'black';
+      handleDraw();
     }
   }, [c, ctx]);
 
-  const handleClear = () => {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  };
+  // const handleClear = () => {
+  //   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  // };
+
   const handleDraw = async () => {
     const newTree = new BinarySearchTree();
     setTree(newTree);
@@ -35,12 +37,13 @@ export default function BinarySearchTree() {
     for (let i = 0; i < values.length; i++) {
       await newTree.insertNode(values[i]);
     }
-    await newTree.depthFirstSearch(newTree.root, target);
   };
 
   const handleDepthFirstSearch = async () => {
-    console.log(tree);
     await tree.depthFirstSearch(tree.root, target);
+  };
+  const handleBreadthFirstSearch = async () => {
+    await tree.breadthFirstSearch(tree.root, target);
   };
 
   const drawNode = (x, y, r, text) => {
@@ -53,7 +56,7 @@ export default function BinarySearchTree() {
   };
   const drawRedNode = (x, y, r, text) => {
     ctx.beginPath();
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'salmon';
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
@@ -63,7 +66,7 @@ export default function BinarySearchTree() {
   };
   const drawGreenNode = (x, y, r, text) => {
     ctx.beginPath();
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'lightgreen';
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.stroke();
@@ -80,24 +83,45 @@ export default function BinarySearchTree() {
       this.nodeYOffset = 60; // how far apart nodes are Y
       this.rootRadius = 20; // starting node size on canvas
     }
-    async depthFirstSearch(node = this.root, target) {
-      if (node.value === target) {
-        // DRAW GREEN NODE
-        drawGreenNode(node.x, node.y, node.radius, node.value);
+    depthFirstSearch = async (node = this.root, target) => {
+      const search = async (node, target, visited = []) => {
+        visited.push(node);
+        if (node.left) visited = await search(node.left, target, visited);
+        if (node.right) visited = await search(node.right, target, visited);
+        return visited;
+      };
+      const visited = await search(node, target);
+      // Search complete -> render visited
+      for (let i = 0; i < visited.length; i++) {
+        let node = visited[i];
+        if (node.value !== target) {
+          drawRedNode(node.x, node.y, node.radius, node.value);
+          await wait(speed * 10);
+        } else {
+          drawGreenNode(node.x, node.y, node.radius, node.value);
+          await wait(speed * 10);
+          return;
+        }
+      }
+    };
+    breadthFirstSearch = async (node = this.root, target) => {
+      const visited = [node];
+      let curr = node;
+      if (curr.value === target) {
+        drawGreenNode(curr.x, curr.y, curr.radius, curr.value);
         await wait(speed * 10);
-        return target;
-      }
-      // DRAW RED NODE
-      drawRedNode(node.x, node.y, node.radius, node.value);
-      await wait(speed * 10);
-      if (node.isLeaf()) {
         return;
+      } else {
+        drawRedNode(curr.x, curr.y, curr.radius, curr.value);
+        await wait(speed * 10);
       }
-      if (node.left) await this.depthFirstSearch(node.left, target);
-      if (node.right) await this.depthFirstSearch(node.right, target);
-    }
-    async breadthFirstSearch(node, target) {}
-    async insertRoot(value) {
+      while (visited.length) {
+        if (curr.left) visited.push(curr.left);
+        if (curr.right) visited.push(curr.right);
+      }
+    };
+
+    insertRoot = async (value) => {
       this.root = new Node({
         value,
         x: this.rootX,
@@ -106,8 +130,8 @@ export default function BinarySearchTree() {
       });
       drawNode(this.rootX, this.rootY, this.rootRadius, value);
       await wait(speed);
-    }
-    async insertNode(value, parent = this.root, level = 0) {
+    };
+    insertNode = async (value, parent = this.root, level = 0) => {
       level += 1;
       if (value > parent.value) {
         if (parent.right === null) {
@@ -146,7 +170,7 @@ export default function BinarySearchTree() {
           await this.insertNode(value, parent.left, level);
         }
       }
-    }
+    };
   }
 
   class Node {
@@ -165,10 +189,12 @@ export default function BinarySearchTree() {
 
   return (
     <div>
-      <button onClick={handleDraw}>Draw</button>
-      <button onClick={handleDepthFirstSearch}>Search</button>
-      <button onClick={handleClear}>Clear</button>
+      <button onClick={handleDraw}>Refresh Tree</button>
+      <button onClick={handleDepthFirstSearch}>Depth First Search</button>
+      {/* <button onClick={handleBreadthFirstSearch}>Breadth First Search</button> */}
+      {/* <button onClick={handleClear}>Clear</button> */}
       <h2>Binary Search Tree</h2>
+      <h4>{`Search Target: ${target}`}</h4>
       <canvas
         id="bstCanvas"
         width={canvasWidth}

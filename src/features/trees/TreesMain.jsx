@@ -23,8 +23,8 @@ export default function TreesMain() {
           Binary Search Tree
         </NavLink>
       </div>
-      <div>Number of nodes: {`[25]`}</div>
-      <div>Method of traversal: {`[Depth-first]`}</div>
+      {/* <div>Number of nodes: {`[25]`}</div>
+      <div>Method of traversal: {`[Depth-first]`}</div> */}
 
       <Outlet />
     </div>

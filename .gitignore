@@ -5,7 +5,7 @@
 /build
 
 # misc
-netlify.toml
+# netlify.toml
 /tests
 .DS_Store
 .env.local
