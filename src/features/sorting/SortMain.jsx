@@ -128,78 +128,90 @@ const SortMain = () => {
         </Paper>
       </div>
 
-      <Grid container columnSpacing={{ xs: 0, sm: 2 }}>
+      {/* <Grid container columnSpacing={{ xs: 0, sm: 2 }}> */}
+      <div className="container" style={{ flexWrap: 'wrap' }}>
         {active.length
           ? active.map((str, i) => {
               switch (str) {
                 case 'insertion':
                   return (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      key={`insertionSort: ${i}`}
-                    >
+                    // <Grid
+                    //   item
+                    //   xs={12}
+                    //   sm={6}
+                    //   md={4}
+                    //   key={`insertionSort: ${i}`}
+                    // >
+                    <div style={{}}>
                       <Paper elevation={3} padding={5}>
                         <div style={{ padding: '0 10px' }}>
                           <InsertionSort Chart={Chart} speed={speed} />
                         </div>
                       </Paper>
-                    </Grid>
+                      {/* </Grid> */}
+                    </div>
                   );
                 case 'selection':
                   return (
-                    <Grid
-                      item
-                      xs={12}
-                      sm={6}
-                      md={4}
-                      key={`selectionSort: ${i}`}
-                    >
+                    // <Grid
+                    //   item
+                    //   xs={12}
+                    //   sm={6}
+                    //   md={4}
+                    //   key={`selectionSort: ${i}`}
+                    // >
+                    <div style={{}}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <SelectionSort Chart={Chart} speed={speed} />
                         </div>
                       </Paper>
-                    </Grid>
+                      {/* </Grid> */}
+                    </div>
                   );
                 case 'bubble':
                   return (
-                    <Grid item xs={12} sm={6} md={4} key={`bubbleSort: ${i}`}>
+                    // <Grid item xs={12} sm={6} md={4} key={`bubbleSort: ${i}`}>
+                    <div style={{}}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <BubbleSort Chart={Chart} speed={speed} />
                         </div>
                       </Paper>
-                    </Grid>
+                    </div>
+                    // </Grid>
                   );
                 case 'merge':
                   return (
-                    <Grid item xs={12} sm={6} md={4} key={`mergeSort: ${i}`}>
+                    // <Grid item xs={12} sm={6} md={4} key={`mergeSort: ${i}`}>
+                    <div style={{}}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <MergeSort Chart={Chart} speed={speed} />
                         </div>
                       </Paper>
-                    </Grid>
+                    </div>
+                    // </Grid>
                   );
                 case 'quick':
                   return (
-                    <Grid item xs={12} sm={6} md={4} key={`quickSort: ${i}`}>
+                    // <Grid item xs={12} sm={6} md={4} key={`quickSort: ${i}`}>
+                    <div style={{}}>
                       <Paper>
                         <div style={{ padding: '0 10px' }}>
                           <QuickSort Chart={Chart} />
                         </div>
                       </Paper>
-                    </Grid>
+                    </div>
+                    // </Grid>
                   );
                 default:
                   return null;
               }
             })
           : null}
-      </Grid>
+      </div>
+      {/* </Grid> */}
     </div>
   );
 };

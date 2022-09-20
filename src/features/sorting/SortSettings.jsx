@@ -3,11 +3,8 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
-import Input from '@mui/material/Input';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -52,35 +49,31 @@ export default function SortSettings({
       open={isControls}
       onClose={() => setIsControls(false)}
     >
-      <Button onClick={() => setIsControls(false)}>X</Button>
-      <Container>
-        <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item xs={8}>
+      <div
+        className="vertical-container"
+        style={{ height: '100%', gap: '5px' }}
+      >
+        {/* <div className="container">
+        <h2>Sort Settings</h2>
+        <Button onClick={() => setIsControls(false)}>X</Button>
+      </div> */}
+        <Paper>
+          <Container>
+            <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
             <Slider
               value={speed}
               onChange={handleSpeedSlider}
               min={10}
               max={1000}
             />
-          </Grid>
-        </Grid>
-      </Container>
-      {/* Speed and Size */}
-      <Container>
-        <div>Number of inputs to sort</div>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item xs={8}>
-            <Slider
-              value={size}
-              onChange={handleSizeSlider}
-              min={10}
-              max={100}
-            />
-          </Grid>
-          <Grid xs={4}>
-            <Input
-              style={{ border: '1px solid black' }}
+          </Container>
+        </Paper>
+        {/* Speed and Size */}
+        <Paper>
+          <Container>
+            <div>Number of inputs to sort: {size}</div>
+            <div className="container">
+              {/* <Input
               value={size}
               size="small"
               onChange={handleSizeInput}
@@ -91,123 +84,190 @@ export default function SortSettings({
                 step: 10,
                 type: 'number',
               }}
-            />
-          </Grid>
-        </Grid>
-      </Container>
-      {/* Filter sorts */}
-      <Stack direction="row" spacing={1}>
-        <Chip
-          onClick={() => {
-            if (active.indexOf('insertion') >= 0) {
-              dispatch(
-                updateActive([...active].filter((elem) => elem !== 'insertion'))
-              );
-            } else {
-              dispatch(updateActive([...active, 'insertion']));
-            }
-          }}
-          variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
-          label="Insertion Sort"
-          color="secondary"
-          size="small"
-        />
-        <Chip
-          onClick={() => {
-            if (active.indexOf('selection') >= 0) {
-              dispatch(
-                updateActive([...active].filter((elem) => elem !== 'selection'))
-              );
-            } else {
-              dispatch(updateActive([...active, 'selection']));
-            }
-          }}
-          variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
-          label="Selection Sort"
-          color="secondary"
-          size="small"
-        />
-        <Chip
-          onClick={() => {
-            if (active.indexOf('bubble') >= 0) {
-              dispatch(
-                updateActive([...active].filter((elem) => elem !== 'bubble'))
-              );
-            } else {
-              dispatch(updateActive([...active, 'bubble']));
-            }
-          }}
-          variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
-          label="Bubble Sort"
-          color="secondary"
-          size="small"
-        />
-        <Chip
-          onClick={() => {
-            if (active.indexOf('merge') >= 0) {
-              dispatch(
-                updateActive([...active].filter((elem) => elem !== 'merge'))
-              );
-            } else {
-              dispatch(updateActive([...active, 'merge']));
-            }
-          }}
-          variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
-          label="Merge Sort"
-          color="secondary"
-          size="small"
-        />
-        <Chip
-          onClick={() => {
-            if (active.indexOf('quick') >= 0) {
-              dispatch(
-                updateActive([...active].filter((elem) => elem !== 'quick'))
-              );
-            } else {
-              dispatch(updateActive([...active, 'quick']));
-            }
-          }}
-          variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}
-          label="Quick Sort"
-          color="secondary"
-          size="small"
-        />
-      </Stack>
-      {/* Type of chart */}
-      <FormControl>
-        <FormLabel id="chart-type-radio-form">Chart Type</FormLabel>
-        <RadioGroup
-          aria-labelledby="chart-type-radio-form"
-          defaultValue="Random"
-          name="radio-buttons-group"
-        >
-          <FormControlLabel
-            value="random"
-            control={<Radio />}
-            label="Random"
-            onChange={(e) => setChartType(e.target.value)}
-          />
-          <FormControlLabel
-            value="valley"
-            control={<Radio />}
-            label="Valley"
-            onChange={(e) => setChartType(e.target.value)}
-          />
-          <FormControlLabel
-            value="pyramid"
-            control={<Radio />}
-            label="Pyramid"
-            onChange={(e) => setChartType(e.target.value)}
-          />
-          <FormControlLabel
-            value="reverse"
-            control={<Radio />}
-            label="Reverse"
-            onChange={(e) => setChartType(e.target.value)}
-          />
-        </RadioGroup>
-      </FormControl>
-      <Button onClick={handleRefresh}>Refresh</Button>
+            /> */}
+              <Slider
+                value={size}
+                onChange={handleSizeSlider}
+                min={10}
+                max={100}
+              />
+            </div>
+          </Container>
+        </Paper>
+        {/* Filter sorts */}
+        <Paper>
+          <Container>
+            <div>Enable or Disable Sort Methods</div>
+            <Grid container rowSpacing={{ xs: 1 }} style={{ padding: '5px' }}>
+              <Grid
+                item
+                xs={4}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Chip
+                  onClick={() => {
+                    if (active.indexOf('insertion') >= 0) {
+                      dispatch(
+                        updateActive(
+                          [...active].filter((elem) => elem !== 'insertion')
+                        )
+                      );
+                    } else {
+                      dispatch(updateActive([...active, 'insertion']));
+                    }
+                  }}
+                  variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
+                  label="Insertion Sort"
+                  color="secondary"
+                  size="small"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Chip
+                  onClick={() => {
+                    if (active.indexOf('selection') >= 0) {
+                      dispatch(
+                        updateActive(
+                          [...active].filter((elem) => elem !== 'selection')
+                        )
+                      );
+                    } else {
+                      dispatch(updateActive([...active, 'selection']));
+                    }
+                  }}
+                  variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
+                  label="Selection Sort"
+                  color="secondary"
+                  size="small"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Chip
+                  onClick={() => {
+                    if (active.indexOf('bubble') >= 0) {
+                      dispatch(
+                        updateActive(
+                          [...active].filter((elem) => elem !== 'bubble')
+                        )
+                      );
+                    } else {
+                      dispatch(updateActive([...active, 'bubble']));
+                    }
+                  }}
+                  variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
+                  label="Bubble Sort"
+                  color="secondary"
+                  size="small"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Chip
+                  onClick={() => {
+                    if (active.indexOf('merge') >= 0) {
+                      dispatch(
+                        updateActive(
+                          [...active].filter((elem) => elem !== 'merge')
+                        )
+                      );
+                    } else {
+                      dispatch(updateActive([...active, 'merge']));
+                    }
+                  }}
+                  variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
+                  label="Merge Sort"
+                  color="secondary"
+                  size="small"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <Chip
+                  onClick={() => {
+                    if (active.indexOf('quick') >= 0) {
+                      dispatch(
+                        updateActive(
+                          [...active].filter((elem) => elem !== 'quick')
+                        )
+                      );
+                    } else {
+                      dispatch(updateActive([...active, 'quick']));
+                    }
+                  }}
+                  variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}
+                  label="Quick Sort"
+                  color="secondary"
+                  size="small"
+                />
+              </Grid>
+            </Grid>
+          </Container>
+        </Paper>
+        {/* Type of chart */}
+        <Paper>
+          <Container>
+            <div>Chart Type</div>
+            <RadioGroup
+              aria-labelledby="chart-type-radio-form"
+              defaultValue="Random"
+              name="radio-buttons-group"
+              row
+            >
+              <label>
+                <Radio
+                  size="small"
+                  value="random"
+                  name="random"
+                  onChange={(e) => setChartType(e.target.value)}
+                />
+                Random
+              </label>
+              <label>
+                <Radio
+                  size="small"
+                  value="valley"
+                  name="valley"
+                  onChange={(e) => setChartType(e.target.value)}
+                />
+                Valley
+              </label>
+              <label>
+                <Radio
+                  size="small"
+                  value="pyramid"
+                  name="pyramid"
+                  onChange={(e) => setChartType(e.target.value)}
+                />
+                Pyramid
+              </label>
+              <label>
+                <Radio
+                  size="small"
+                  value="reverse"
+                  name="reverse"
+                  onChange={(e) => setChartType(e.target.value)}
+                />
+                Reverse
+              </label>
+            </RadioGroup>
+            <Button onClick={handleRefresh}>Refresh</Button>
+          </Container>
+        </Paper>
+      </div>
     </Drawer>
   );
 }

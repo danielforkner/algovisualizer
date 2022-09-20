@@ -1,4 +1,4 @@
-import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { wait } from '../../app/helpers';
 import './styles/arrays.css';
@@ -6,6 +6,7 @@ import './styles/arrays.css';
 export default function TwoSum() {
   const [searching, setSearching] = useState(false);
   const [array, setArray] = useState([7, 15, 2, 9, 6, 80, 4, 10, 3]);
+  const [arraySize, setArraySize] = useState(15);
   const [target, setTarget] = useState(89);
   const [left, setLeft] = useState(-1);
   const [right, setRight] = useState(-1);
@@ -17,6 +18,20 @@ export default function TwoSum() {
   const [speed, setSpeed] = useState(1000);
 
   const handleRefresh = () => {
+    // build array
+    let arr = [];
+    for (let i = 0; i < arraySize; i++) {
+      let num = Math.floor(Math.random() * 100);
+      arr.push(num);
+    }
+    // select random target
+    let i = Math.floor(Math.random() * arraySize);
+    let j = i;
+    while (j === i) {
+      j = Math.floor(Math.random() * arraySize);
+    }
+    setTarget(arr[i] + arr[j]);
+    setArray(arr);
     setAnswer('[]');
     setCurrentSum(0);
     setLeft(-1);
@@ -26,28 +41,36 @@ export default function TwoSum() {
     setPossibleMatch(0);
   };
 
-  const search = () => {
+  const search = async () => {
+    setSearching(true);
     setAnswer('[]');
     setCurrentSum(0);
     setLeft(0);
     setRight(array.length - 1);
     switch (method) {
       case 'Sort First':
-        sortSearch();
+        await sortSearch();
         break;
       case 'No Sorting':
-        noSearchSort();
+        await noSearchSort();
         break;
       default:
-        sortSearch();
+        await sortSearch();
     }
+    setSearching(false);
   };
 
   const sortSearch = async () => {
     const originalArray = [...array];
     let localLeft = 0;
     let localRight = array.length - 1;
-    setArray([...array.sort((a, b) => a - b)]);
+    let sorted = [...array.sort((a, b) => a - b)];
+    let arr = [];
+    for (let i = 0; i < sorted.length; i++) {
+      arr.push(sorted[i]);
+      setArray([...arr]);
+      await wait(30);
+    }
     await wait(speed);
     while (localLeft < localRight) {
       let sum = array[localLeft] + array[localRight];
@@ -103,7 +126,8 @@ export default function TwoSum() {
   };
   return (
     <div>
-      <h2>Two Sum</h2>
+      <h3>Two Sum</h3>
+      <hr />
       <p>{`Target Sum: ${target}`}</p>
       <p>{`Search Method: ${method}`}</p>
       <select value={method} onChange={(e) => setMethod(e.target.value)}>
@@ -114,8 +138,8 @@ export default function TwoSum() {
           No Sorting
         </option>
       </select>
-      <button onClick={search}>Search</button>
-      <button onClick={handleRefresh}>Refresh</button>
+      <Button onClick={search}>Search</Button>
+      {!searching ? <Button onClick={handleRefresh}>Refresh</Button> : null}
       <div className="grid-container">
         {/* <div className="cell">[</div> */}
         {array.map((cell, i) => {
@@ -147,6 +171,7 @@ export default function TwoSum() {
         </>
       ) : null}
       <p>{`Index of nums that sum to target: [${answer[0]}, ${answer[1]}]`}</p>
+      <hr />
       <h4>What are the pros and cons of sorting the array first?</h4>
       <p>
         Sorting the array first has a O(nlog(n)) time complexity, but only O(1)
