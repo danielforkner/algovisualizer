@@ -39,7 +39,7 @@ export default function ArraysMain() {
   return (
     <>
       <h2>Sums</h2>
-      <Paper>
+      <Paper style={{ maxWidth: '700px' }}>
         <Tabs
           value={value}
           onChange={handleChange}

@@ -124,6 +124,11 @@ export default function TwoSum() {
   return (
     <div>
       <h3>Two Sum</h3>
+      <p>
+        <b>Objective: </b>Given an array of integers and a target sum, the
+        algorithm should return the indeces of the two integers that sum to the
+        target.
+      </p>
       <hr />
       <p>{`Target Sum: ${target}`}</p>
       <p>{`Search Method: ${method}`}</p>
@@ -176,10 +181,11 @@ export default function TwoSum() {
       <h4>What are the pros and cons of sorting the array first?</h4>
       <p>
         Sorting the array first has a O(nlog(n)) time complexity, but only O(1)
-        space complexity because the array can be sorted in place. Choosing not
-        to sort the array results in a more efficient O(n) algorithm, however
-        there is an additional O(n) space complexity due to the need for a
-        hashtable.
+        space complexity because the array can be sorted in place (unless
+        mutating the array is not feasible. In that case O(n) space is
+        required). Choosing not to sort the array results in a more efficient
+        O(n) algorithm, however there is an additional O(n) space complexity due
+        to the need for a hashtable.
       </p>
     </div>
   );

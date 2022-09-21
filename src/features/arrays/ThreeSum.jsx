@@ -38,7 +38,6 @@ export default function ThreeSum() {
           if (array[i] + array[j] + array[k] === target) {
             triplesArr.push([array[i], array[j], array[k]]);
             setTriples([...triplesArr]);
-            console.log('FOUND ONE', triples);
           }
         }
       }
@@ -76,6 +75,11 @@ export default function ThreeSum() {
   return (
     <div>
       <h3>Three Sum</h3>
+      <p>
+        <b>Objective: </b>Given an array of integers and a target sum, the
+        algorithm should identify all the triplets in the array that sum to the
+        target and return them.
+      </p>
       <hr />
       <p>Target Sum: {target}</p>
       <p>Search Method: {method}</p>
@@ -114,6 +118,11 @@ export default function ThreeSum() {
         ]
       </p>
       <hr />
+      <h4>Time and Space Complexity</h4>
+      <p>
+        The brute force method has an abysmal O(n^3) time complexity. Both
+        methods can be done in O(1) space.
+      </p>
     </div>
   );
 }
