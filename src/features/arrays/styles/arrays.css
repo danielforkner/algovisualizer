@@ -2,4 +2,13 @@
     background-color: lightgreen;
 } .right {
     background-color: pink;
+} .iIdx {
+    background-color: rgb(107, 41, 41);
+    color: white
+} .jIdx {
+    background-color: rgb(180, 77, 77);
+    color: white
+} .kIdx {
+    background-color: rgb(246, 121, 121);
+    color: white
 }

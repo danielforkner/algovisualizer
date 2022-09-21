@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { wait } from '../../app/helpers';
 import './styles/arrays.css';
 
@@ -15,7 +15,9 @@ export default function TwoSum() {
   const [currentSum, setCurrentSum] = useState(0);
   const [possibleMatch, setPossibleMatch] = useState(0);
   const [method, setMethod] = useState('Sort First');
-  const [speed, setSpeed] = useState(1000);
+  const [speed, setSpeed] = useState(900);
+
+  React.useEffect(() => handleRefresh(), []);
 
   const handleRefresh = () => {
     // build array
@@ -57,7 +59,6 @@ export default function TwoSum() {
       default:
         await sortSearch();
     }
-    setSearching(false);
   };
 
   const sortSearch = async () => {
@@ -71,34 +72,29 @@ export default function TwoSum() {
       setArray([...arr]);
       await wait(30);
     }
-    await wait(speed);
     while (localLeft < localRight) {
       let sum = array[localLeft] + array[localRight];
       setCurrentSum(sum);
+      await wait(speed);
       if (sum === target) {
-        setLeft(localLeft);
-        setRight(localRight);
-        setArray([...array]);
-        await wait(speed);
         setArray([...originalArray]);
         localLeft = originalArray.indexOf(array[localLeft]);
         localRight = originalArray.indexOf(array[localRight]);
         setLeft(localLeft);
         setRight(localRight);
         setAnswer([localLeft, localRight]);
+        setSearching(false);
         await wait(speed);
         return;
       }
       if (sum > target) {
-        setRight(localRight);
         localRight--;
+        setRight(localRight);
         setArray([...array]);
-        await wait(speed);
       } else if (sum < target) {
-        setLeft(localLeft);
         localLeft++;
+        setLeft(localLeft);
         setArray([...array]);
-        await wait(speed);
       }
     }
   };
@@ -115,6 +111,7 @@ export default function TwoSum() {
       if (map.has(possibleMatch)) {
         setAnswer([i, map.get(possibleMatch)]);
         setRight(map.get(possibleMatch));
+        setSearching(false);
         await wait(speed);
         return;
       } else {
@@ -130,16 +127,20 @@ export default function TwoSum() {
       <hr />
       <p>{`Target Sum: ${target}`}</p>
       <p>{`Search Method: ${method}`}</p>
-      <select value={method} onChange={(e) => setMethod(e.target.value)}>
-        <option name="sort" value={'Sort First'}>
-          Sort First
-        </option>
-        <option name="don't sort" value={'No Sorting'}>
-          No Sorting
-        </option>
-      </select>
-      <Button onClick={search}>Search</Button>
-      {!searching ? <Button onClick={handleRefresh}>Refresh</Button> : null}
+      {!searching ? (
+        <>
+          <select value={method} onChange={(e) => setMethod(e.target.value)}>
+            <option name="sort" value={'Sort First'}>
+              Sort First
+            </option>
+            <option name="don't sort" value={'No Sorting'}>
+              No Sorting
+            </option>
+          </select>
+          <Button onClick={search}>Search</Button>
+          <Button onClick={handleRefresh}>Refresh</Button>{' '}
+        </>
+      ) : null}
       <div className="grid-container">
         {/* <div className="cell">[</div> */}
         {array.map((cell, i) => {
