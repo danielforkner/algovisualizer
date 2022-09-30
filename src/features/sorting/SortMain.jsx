@@ -11,7 +11,6 @@ import MergeSort from './MergeSort';
 import SortSettings from './SortSettings';
 import QuickSort from './QuickSort';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Unstable_Grid2';
 import SortControls from './SortControls';
 
 const SortMain = () => {
@@ -108,7 +107,7 @@ const SortMain = () => {
   }, [activeSorting]);
 
   return (
-    <div>
+    <>
       <SortSettings
         active={active}
         isControls={isControls}
@@ -116,7 +115,8 @@ const SortMain = () => {
         setChartType={setChartType}
         handleRefresh={handleRefresh}
       />
-      <div className="container">
+      <div className="container" id="sortControls">
+        <h1>Sorting Algorithms</h1>
         <Paper>
           <SortControls
             sorting={sorting}
@@ -128,82 +128,49 @@ const SortMain = () => {
         </Paper>
       </div>
 
-      {/* <Grid container columnSpacing={{ xs: 0, sm: 2 }}> */}
-      <div className="container" style={{ flexWrap: 'wrap' }}>
+      <div className="container" style={{ flexWrap: 'wrap', gap: '1rem' }}>
         {active.length
           ? active.map((str, i) => {
               switch (str) {
                 case 'insertion':
                   return (
-                    // <Grid
-                    //   item
-                    //   xs={12}
-                    //   sm={6}
-                    //   md={4}
-                    //   key={`insertionSort: ${i}`}
-                    // >
-                    <div style={{}}>
-                      <Paper elevation={3} padding={5}>
-                        <div style={{ padding: '0 10px' }}>
-                          <InsertionSort Chart={Chart} speed={speed} />
-                        </div>
-                      </Paper>
-                      {/* </Grid> */}
-                    </div>
+                    <Paper sx={{ width: '450px' }} elevation={3} padding={5}>
+                      <div style={{ padding: '0 10px' }}>
+                        <InsertionSort Chart={Chart} speed={speed} />
+                      </div>
+                    </Paper>
                   );
                 case 'selection':
                   return (
-                    // <Grid
-                    //   item
-                    //   xs={12}
-                    //   sm={6}
-                    //   md={4}
-                    //   key={`selectionSort: ${i}`}
-                    // >
-                    <div style={{}}>
-                      <Paper>
-                        <div style={{ padding: '0 10px' }}>
-                          <SelectionSort Chart={Chart} speed={speed} />
-                        </div>
-                      </Paper>
-                      {/* </Grid> */}
-                    </div>
+                    <Paper sx={{ width: '450px' }}>
+                      <div style={{ padding: '0 10px' }}>
+                        <SelectionSort Chart={Chart} speed={speed} />
+                      </div>
+                    </Paper>
                   );
                 case 'bubble':
                   return (
-                    // <Grid item xs={12} sm={6} md={4} key={`bubbleSort: ${i}`}>
-                    <div style={{}}>
-                      <Paper>
-                        <div style={{ padding: '0 10px' }}>
-                          <BubbleSort Chart={Chart} speed={speed} />
-                        </div>
-                      </Paper>
-                    </div>
-                    // </Grid>
+                    <Paper sx={{ width: '450px' }}>
+                      <div style={{ padding: '0 10px' }}>
+                        <BubbleSort Chart={Chart} speed={speed} />
+                      </div>
+                    </Paper>
                   );
                 case 'merge':
                   return (
-                    // <Grid item xs={12} sm={6} md={4} key={`mergeSort: ${i}`}>
-                    <div style={{}}>
-                      <Paper>
-                        <div style={{ padding: '0 10px' }}>
-                          <MergeSort Chart={Chart} speed={speed} />
-                        </div>
-                      </Paper>
-                    </div>
-                    // </Grid>
+                    <Paper sx={{ width: '450px' }}>
+                      <div style={{ padding: '0 10px' }}>
+                        <MergeSort Chart={Chart} speed={speed} />
+                      </div>
+                    </Paper>
                   );
                 case 'quick':
                   return (
-                    // <Grid item xs={12} sm={6} md={4} key={`quickSort: ${i}`}>
-                    <div style={{}}>
-                      <Paper>
-                        <div style={{ padding: '0 10px' }}>
-                          <QuickSort Chart={Chart} />
-                        </div>
-                      </Paper>
-                    </div>
-                    // </Grid>
+                    <Paper sx={{ width: '450px' }}>
+                      <div style={{ padding: '0 10px' }}>
+                        <QuickSort Chart={Chart} />
+                      </div>
+                    </Paper>
                   );
                 default:
                   return null;
@@ -211,8 +178,7 @@ const SortMain = () => {
             })
           : null}
       </div>
-      {/* </Grid> */}
-    </div>
+    </>
   );
 };
 

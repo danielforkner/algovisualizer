@@ -9,7 +9,7 @@ import ArraysMain from '../features/arrays/ArraysMain';
 
 const App = () => {
   return (
-    <div className="container">
+    <div id="appContainer" className="vertical-container">
       <Sidebar />
       <main id="main">
         <Routes>

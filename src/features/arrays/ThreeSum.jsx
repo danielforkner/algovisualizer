@@ -3,22 +3,33 @@ import Button from '@mui/material/Button';
 import { wait } from '../../app/helpers';
 
 export default function ThreeSum() {
-  const [method, setMethod] = useState('Brute Force');
   const [searching, setSearching] = useState(false);
   const [array, setArray] = useState([]);
   const [arraySize, setArraySize] = useState(15);
   const [target, setTarget] = useState(89);
   const [triples, setTriples] = useState([]);
+  const [currentSum, setCurrentSum] = useState(0);
   const [iIdx, setIIdx] = useState(-1);
   const [jIdx, setJIdx] = useState(-1);
   const [kIdx, setKIdx] = useState(-1);
+  const [method, setMethod] = useState('Brute Force');
   const [speed, setSpeed] = useState(250);
 
   useEffect(() => handleRefresh(), []);
 
   const search = () => {
+    setTriples([]);
     setSearching(true);
-    bruteForceSearch();
+    switch (method) {
+      case 'Brute Force':
+        bruteForceSearch();
+        break;
+      case 'Sort First':
+        sortedSearch();
+        break;
+      default:
+        sortedSearch();
+    }
   };
 
   const bruteForceSearch = async () => {
@@ -43,7 +54,55 @@ export default function ThreeSum() {
       }
     }
     setSearching(false);
-    return triples;
+    // return triples;
+  };
+
+  const sortedSearch = async () => {
+    let triplesArr = [];
+    let originalArray = [...array];
+    let sorted = array.sort((a, b) => a - b);
+    let arr = [];
+    for (let i = 0; i < sorted.length; i++) {
+      arr.push(sorted[i]);
+      setArray([...arr]);
+      await wait(30);
+    }
+    for (let i = 0; i < sorted.length - 2; i++) {
+      let left = i + 1;
+      let right = sorted.length - 1;
+      setIIdx(i);
+      setJIdx(left);
+      setKIdx(right);
+      setArray([...array]);
+      await wait(speed);
+      while (left < right) {
+        let sum = sorted[i] + sorted[left] + sorted[right];
+        setCurrentSum(sum);
+        if (sum === target) {
+          triplesArr.push([sorted[i], sorted[left], sorted[right]]);
+          setTriples([...triplesArr]);
+          setJIdx(left);
+          setKIdx(right);
+          setArray([...array]);
+          await wait(speed / 2);
+          left++;
+          right--;
+        } else if (sum < target) {
+          left++;
+          setJIdx(left);
+          setArray([...array]);
+          await wait(speed / 2);
+        } else if (sum > target) {
+          right--;
+          setKIdx(right);
+          setArray([...array]);
+          await wait(speed / 2);
+        }
+      }
+    }
+    setKIdx(array.length - 1);
+    setArray(originalArray);
+    setSearching(false);
   };
 
   const handleRefresh = () => {
@@ -69,12 +128,12 @@ export default function ThreeSum() {
     setIIdx(-1);
     setJIdx(-1);
     setKIdx(-1);
+    setCurrentSum(0);
     setTriples([]);
   };
 
   return (
     <div>
-      <h3>Three Sum</h3>
       <p>
         <b>Objective: </b>Given an array of integers and a target sum, the
         algorithm should identify all the triplets in the array that sum to the
@@ -83,13 +142,32 @@ export default function ThreeSum() {
       <hr />
       <p>Target Sum: {target}</p>
       <p>Search Method: {method}</p>
-
-      {!searching ? (
-        <>
-          <Button onClick={search}>Search</Button>
-          <Button onClick={handleRefresh}>Refresh</Button>
-        </>
-      ) : null}
+      <select
+        disabled={searching ? true : false}
+        value={method}
+        onChange={(e) => setMethod(e.target.value)}
+      >
+        <option name="sort" value={'Sort First'}>
+          Sort First
+        </option>
+        <option name="Brute Force" value={'Brute Force'}>
+          Brute Force
+        </option>
+      </select>
+      <Button
+        variant="outlined"
+        disabled={searching ? true : false}
+        onClick={search}
+      >
+        Search
+      </Button>
+      <Button
+        variant="outlined"
+        disabled={searching ? true : false}
+        onClick={handleRefresh}
+      >
+        Refresh
+      </Button>
       <div className="grid-container">
         {array.map((cell, i) => {
           return (
@@ -110,18 +188,25 @@ export default function ThreeSum() {
           );
         })}
       </div>
-      <p>
+      <p>{`Current sum: ${currentSum}`}</p>
+      <div>
         Triples Found: [
-        {triples.map((element) => {
-          return <p>{`[${element[0]}, ${element[1]}, ${element[2]}]`},</p>;
+        {triples.map((element, i) => {
+          return (
+            <p key={`ThreeSumTriples: ${i}`}>
+              {`[${element[0]}, ${element[1]}, ${element[2]}]`},
+            </p>
+          );
         })}
         ]
-      </p>
+      </div>
       <hr />
       <h4>Time and Space Complexity</h4>
       <p>
-        The brute force method has an abysmal O(n^3) time complexity. Both
-        methods can be done in O(1) space.
+        The brute force method has O(n^3) time complexity. Sorting the array
+        first reduces the time complexity to O(n^2). Both methods can be done in
+        O(1) space, but sorting the array requires O(n) space if the array is
+        immutable.
       </p>
     </div>
   );

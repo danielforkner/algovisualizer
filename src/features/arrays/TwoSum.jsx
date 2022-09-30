@@ -15,7 +15,7 @@ export default function TwoSum() {
   const [currentSum, setCurrentSum] = useState(0);
   const [possibleMatch, setPossibleMatch] = useState(0);
   const [method, setMethod] = useState('Sort First');
-  const [speed, setSpeed] = useState(900);
+  const [speed, setSpeed] = useState(500);
 
   React.useEffect(() => handleRefresh(), []);
 
@@ -39,7 +39,6 @@ export default function TwoSum() {
     setLeft(-1);
     setRight(-1);
     setMap(new Map());
-    setCurrentSum(0);
     setPossibleMatch(0);
   };
 
@@ -65,7 +64,7 @@ export default function TwoSum() {
     const originalArray = [...array];
     let localLeft = 0;
     let localRight = array.length - 1;
-    let sorted = [...array.sort((a, b) => a - b)];
+    let sorted = array.sort((a, b) => a - b);
     let arr = [];
     for (let i = 0; i < sorted.length; i++) {
       arr.push(sorted[i]);
@@ -123,7 +122,6 @@ export default function TwoSum() {
   };
   return (
     <div>
-      <h3>Two Sum</h3>
       <p>
         <b>Objective: </b>Given an array of integers and a target sum, the
         algorithm should return the indeces of the two integers that sum to the
@@ -132,20 +130,33 @@ export default function TwoSum() {
       <hr />
       <p>{`Target Sum: ${target}`}</p>
       <p>{`Search Method: ${method}`}</p>
-      {!searching ? (
-        <>
-          <select value={method} onChange={(e) => setMethod(e.target.value)}>
-            <option name="sort" value={'Sort First'}>
-              Sort First
-            </option>
-            <option name="don't sort" value={'No Sorting'}>
-              No Sorting
-            </option>
-          </select>
-          <Button onClick={search}>Search</Button>
-          <Button onClick={handleRefresh}>Refresh</Button>{' '}
-        </>
-      ) : null}
+
+      <select
+        disabled={searching ? true : false}
+        value={method}
+        onChange={(e) => setMethod(e.target.value)}
+      >
+        <option name="sort" value={'Sort First'}>
+          Sort First
+        </option>
+        <option name="don't sort" value={'No Sorting'}>
+          No Sorting
+        </option>
+      </select>
+      <Button
+        disabled={searching ? true : false}
+        variant="outlined"
+        onClick={search}
+      >
+        Search
+      </Button>
+      <Button
+        disabled={searching ? true : false}
+        variant="outlined"
+        onClick={handleRefresh}
+      >
+        Refresh
+      </Button>
       <div className="grid-container">
         {/* <div className="cell">[</div> */}
         {array.map((cell, i) => {

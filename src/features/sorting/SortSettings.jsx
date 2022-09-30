@@ -45,18 +45,20 @@ export default function SortSettings({
 
   return (
     <Drawer
+      sx={{
+        '& .css-1160xiw-MuiPaper-root-MuiDrawer-paper': {
+          backgroundColor: 'transparent',
+          boxShadow: 0,
+        },
+      }}
       anchor="right"
       open={isControls}
       onClose={() => setIsControls(false)}
     >
       <div
         className="vertical-container"
-        style={{ height: '100%', gap: '5px' }}
+        style={{ gap: '5px', marginTop: '1rem' }}
       >
-        {/* <div className="container">
-        <h2>Sort Settings</h2>
-        <Button onClick={() => setIsControls(false)}>X</Button>
-      </div> */}
         <Paper>
           <Container>
             <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
@@ -73,18 +75,6 @@ export default function SortSettings({
           <Container>
             <div>Number of inputs to sort: {size}</div>
             <div className="container">
-              {/* <Input
-              value={size}
-              size="small"
-              onChange={handleSizeInput}
-              onBlur={handleBlur}
-              inputProps={{
-                min: 10,
-                max: 100,
-                step: 10,
-                type: 'number',
-              }}
-            /> */}
               <Slider
                 value={size}
                 onChange={handleSizeSlider}
@@ -96,126 +86,101 @@ export default function SortSettings({
         </Paper>
         {/* Filter sorts */}
         <Paper>
-          <Container>
-            <div>Enable or Disable Sort Methods</div>
-            <Grid container rowSpacing={{ xs: 1 }} style={{ padding: '5px' }}>
-              <Grid
-                item
-                xs={4}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (active.indexOf('insertion') >= 0) {
-                      dispatch(
-                        updateActive(
-                          [...active].filter((elem) => elem !== 'insertion')
-                        )
-                      );
-                    } else {
-                      dispatch(updateActive([...active, 'insertion']));
-                    }
-                  }}
-                  variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
-                  label="Insertion Sort"
-                  color="secondary"
-                  size="small"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (active.indexOf('selection') >= 0) {
-                      dispatch(
-                        updateActive(
-                          [...active].filter((elem) => elem !== 'selection')
-                        )
-                      );
-                    } else {
-                      dispatch(updateActive([...active, 'selection']));
-                    }
-                  }}
-                  variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
-                  label="Selection Sort"
-                  color="secondary"
-                  size="small"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (active.indexOf('bubble') >= 0) {
-                      dispatch(
-                        updateActive(
-                          [...active].filter((elem) => elem !== 'bubble')
-                        )
-                      );
-                    } else {
-                      dispatch(updateActive([...active, 'bubble']));
-                    }
-                  }}
-                  variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
-                  label="Bubble Sort"
-                  color="secondary"
-                  size="small"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (active.indexOf('merge') >= 0) {
-                      dispatch(
-                        updateActive(
-                          [...active].filter((elem) => elem !== 'merge')
-                        )
-                      );
-                    } else {
-                      dispatch(updateActive([...active, 'merge']));
-                    }
-                  }}
-                  variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
-                  label="Merge Sort"
-                  color="secondary"
-                  size="small"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={4}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Chip
-                  onClick={() => {
-                    if (active.indexOf('quick') >= 0) {
-                      dispatch(
-                        updateActive(
-                          [...active].filter((elem) => elem !== 'quick')
-                        )
-                      );
-                    } else {
-                      dispatch(updateActive([...active, 'quick']));
-                    }
-                  }}
-                  variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}
-                  label="Quick Sort"
-                  color="secondary"
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-          </Container>
+          <div
+            className="container"
+            style={{ flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}
+          >
+            <Chip
+              style={{ flexBasis: '25%' }}
+              onClick={() => {
+                if (active.indexOf('insertion') >= 0) {
+                  dispatch(
+                    updateActive(
+                      [...active].filter((elem) => elem !== 'insertion')
+                    )
+                  );
+                } else {
+                  dispatch(updateActive([...active, 'insertion']));
+                }
+              }}
+              variant={active.indexOf('insertion') >= 0 ? '' : 'outlined'}
+              label="Insertion Sort"
+              color="secondary"
+              size="medium"
+            />
+
+            <Chip
+              style={{ flexBasis: '33%' }}
+              onClick={() => {
+                if (active.indexOf('selection') >= 0) {
+                  dispatch(
+                    updateActive(
+                      [...active].filter((elem) => elem !== 'selection')
+                    )
+                  );
+                } else {
+                  dispatch(updateActive([...active, 'selection']));
+                }
+              }}
+              variant={active.indexOf('selection') >= 0 ? '' : 'outlined'}
+              label="Selection Sort"
+              color="secondary"
+              size="medium"
+            />
+
+            <Chip
+              style={{ flexBasis: '33%' }}
+              onClick={() => {
+                if (active.indexOf('bubble') >= 0) {
+                  dispatch(
+                    updateActive(
+                      [...active].filter((elem) => elem !== 'bubble')
+                    )
+                  );
+                } else {
+                  dispatch(updateActive([...active, 'bubble']));
+                }
+              }}
+              variant={active.indexOf('bubble') >= 0 ? '' : 'outlined'}
+              label="Bubble Sort"
+              color="secondary"
+              size="medium"
+            />
+
+            <Chip
+              style={{ flexBasis: '33%' }}
+              onClick={() => {
+                if (active.indexOf('merge') >= 0) {
+                  dispatch(
+                    updateActive([...active].filter((elem) => elem !== 'merge'))
+                  );
+                } else {
+                  dispatch(updateActive([...active, 'merge']));
+                }
+              }}
+              variant={active.indexOf('merge') >= 0 ? '' : 'outlined'}
+              label="Merge Sort"
+              color="secondary"
+              size="medium"
+            />
+
+            <Chip
+              style={{ flexBasis: '33%' }}
+              onClick={() => {
+                if (active.indexOf('quick') >= 0) {
+                  dispatch(
+                    updateActive([...active].filter((elem) => elem !== 'quick'))
+                  );
+                } else {
+                  dispatch(updateActive([...active, 'quick']));
+                }
+              }}
+              variant={active.indexOf('quick') >= 0 ? '' : 'outlined'}
+              label="Quick Sort"
+              color="secondary"
+              size="medium"
+            />
+          </div>
         </Paper>
         {/* Type of chart */}
         <Paper>
@@ -229,7 +194,7 @@ export default function SortSettings({
             >
               <label>
                 <Radio
-                  size="small"
+                  size="medium"
                   value="random"
                   name="random"
                   onChange={(e) => setChartType(e.target.value)}
@@ -238,7 +203,7 @@ export default function SortSettings({
               </label>
               <label>
                 <Radio
-                  size="small"
+                  size="medium"
                   value="valley"
                   name="valley"
                   onChange={(e) => setChartType(e.target.value)}
@@ -247,7 +212,7 @@ export default function SortSettings({
               </label>
               <label>
                 <Radio
-                  size="small"
+                  size="medium"
                   value="pyramid"
                   name="pyramid"
                   onChange={(e) => setChartType(e.target.value)}
@@ -256,7 +221,7 @@ export default function SortSettings({
               </label>
               <label>
                 <Radio
-                  size="small"
+                  size="medium"
                   value="reverse"
                   name="reverse"
                   onChange={(e) => setChartType(e.target.value)}
