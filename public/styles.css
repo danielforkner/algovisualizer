@@ -29,6 +29,11 @@ h2 {
 #homeLink {
   padding: 1rem;
 }
+#homeLink a{
+  text-decoration: none;
+  color: #c916c9;
+  font-weight: bold;
+}
 #navLinks {
 display: flex;
 }
@@ -49,6 +54,7 @@ display: flex;
 .activeLink {
   color: #c916c9;
   background-color: #f5f5dc;
+  border-bottom: 2px solid blue;
   font-weight: bold;
   text-decoration: none;
 }
@@ -90,9 +96,4 @@ display: flex;
   -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
   transition: opacity 0.2s;
   border: 1px solid black;
-}
-/* SORTING */
-#sortControls {
-  align-items: center;
-  gap: 1rem;
 }

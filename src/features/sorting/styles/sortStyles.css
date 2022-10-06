@@ -3,3 +3,7 @@
     grid-template-columns: 1fr 1fr;
     /* margin-right: 10rem; */
 }
+#sortControls {
+    align-items: center;
+    gap: 1rem;
+  }
