@@ -50,6 +50,10 @@ export default function SortSettings({
           backgroundColor: 'transparent',
           boxShadow: 0,
         },
+        '& .css-1ab2xsx': {
+          backgroundColor: 'transparent',
+          boxShadow: 0,
+        },
       }}
       anchor="right"
       open={isControls}

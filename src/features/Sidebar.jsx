@@ -5,9 +5,7 @@ export default function Sidebar() {
   return (
     <div className="container" id="sidebar">
       <div id="homeLink">
-        <NavLink to="/" className="activeLink">
-          ALGOVISUALIZED
-        </NavLink>
+        <NavLink to="/">ALGOVISUALIZED</NavLink>
       </div>
       <div id="navLinks">
         <NavLink
