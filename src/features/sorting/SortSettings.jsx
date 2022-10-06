@@ -1,13 +1,10 @@
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSize, setSpeed, updateActive } from './sortingSlice';
 
@@ -20,6 +17,7 @@ export default function SortSettings({
   const speed = useSelector((state) => state.sorting.speed);
   const size = useSelector((state) => state.sorting.size);
   const active = useSelector((state) => state.sorting.active);
+  const charTypes = ['Random', 'Valley', 'Pyramid', 'Reverse'];
   const dispatch = useDispatch();
 
   const handleSpeedSlider = (event, newValue) => {
@@ -27,20 +25,6 @@ export default function SortSettings({
   };
   const handleSizeSlider = (event, newValue) => {
     dispatch(setSize(newValue));
-  };
-
-  const handleSizeInput = (event) => {
-    dispatch(
-      setSize(event.target.value === '' ? '' : Number(event.target.value))
-    );
-  };
-
-  const handleBlur = () => {
-    if (size < 0) {
-      dispatch(setSize(0));
-    } else if (size > 100) {
-      dispatch(setSize(100));
-    }
   };
 
   return (
@@ -64,7 +48,7 @@ export default function SortSettings({
         style={{ gap: '5px', marginTop: '1rem' }}
       >
         <Paper>
-          <Container>
+          <div className="vertical-container" style={{ padding: '1rem' }}>
             <div>{`Animation Speed: ${(speed / 1000).toFixed(3)}s`}</div>
             <Slider
               value={speed}
@@ -72,30 +56,33 @@ export default function SortSettings({
               min={10}
               max={1000}
             />
-          </Container>
+          </div>
         </Paper>
         {/* Speed and Size */}
         <Paper>
-          <Container>
+          <div className="vertical-container" style={{ padding: '1rem' }}>
             <div>Number of inputs to sort: {size}</div>
-            <div className="container">
-              <Slider
-                value={size}
-                onChange={handleSizeSlider}
-                min={10}
-                max={100}
-              />
-            </div>
-          </Container>
+            <Slider
+              value={size}
+              onChange={handleSizeSlider}
+              min={10}
+              max={100}
+            />
+          </div>
         </Paper>
         {/* Filter sorts */}
         <Paper>
           <div
             className="container"
-            style={{ flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}
+            style={{
+              flexWrap: 'wrap',
+              gap: '1rem',
+              justifyContent: 'center',
+              padding: '1rem',
+            }}
           >
             <Chip
-              style={{ flexBasis: '25%' }}
+              style={{ flexBasis: '15%' }}
               onClick={() => {
                 if (active.indexOf('insertion') >= 0) {
                   dispatch(
@@ -114,7 +101,7 @@ export default function SortSettings({
             />
 
             <Chip
-              style={{ flexBasis: '33%' }}
+              style={{ flexBasis: '15%' }}
               onClick={() => {
                 if (active.indexOf('selection') >= 0) {
                   dispatch(
@@ -133,7 +120,7 @@ export default function SortSettings({
             />
 
             <Chip
-              style={{ flexBasis: '33%' }}
+              style={{ flexBasis: '15%' }}
               onClick={() => {
                 if (active.indexOf('bubble') >= 0) {
                   dispatch(
@@ -150,9 +137,8 @@ export default function SortSettings({
               color="secondary"
               size="medium"
             />
-
             <Chip
-              style={{ flexBasis: '33%' }}
+              style={{ flexBasis: '15%' }}
               onClick={() => {
                 if (active.indexOf('merge') >= 0) {
                   dispatch(
@@ -167,9 +153,8 @@ export default function SortSettings({
               color="secondary"
               size="medium"
             />
-
             <Chip
-              style={{ flexBasis: '33%' }}
+              style={{ flexBasis: '15%' }}
               onClick={() => {
                 if (active.indexOf('quick') >= 0) {
                   dispatch(
@@ -188,53 +173,35 @@ export default function SortSettings({
         </Paper>
         {/* Type of chart */}
         <Paper>
-          <Container>
-            <div>Chart Type</div>
+          <div
+            className="vertical-container"
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          >
+            <p>
+              <strong>Chart Type</strong>
+            </p>
             <RadioGroup
               aria-labelledby="chart-type-radio-form"
-              defaultValue="Random"
+              defaultValue="random"
               name="radio-buttons-group"
               row
             >
-              <label>
-                <Radio
-                  size="medium"
-                  value="random"
-                  name="random"
-                  onChange={(e) => setChartType(e.target.value)}
-                />
-                Random
-              </label>
-              <label>
-                <Radio
-                  size="medium"
-                  value="valley"
-                  name="valley"
-                  onChange={(e) => setChartType(e.target.value)}
-                />
-                Valley
-              </label>
-              <label>
-                <Radio
-                  size="medium"
-                  value="pyramid"
-                  name="pyramid"
-                  onChange={(e) => setChartType(e.target.value)}
-                />
-                Pyramid
-              </label>
-              <label>
-                <Radio
-                  size="medium"
-                  value="reverse"
-                  name="reverse"
-                  onChange={(e) => setChartType(e.target.value)}
-                />
-                Reverse
-              </label>
+              {charTypes.map((chart) => {
+                return (
+                  <label key={`chartRadio: ${chart}`}>
+                    <Radio
+                      size="medium"
+                      value={chart}
+                      name={chart}
+                      onChange={(e) => setChartType(e.target.value)}
+                    />
+                    {chart}
+                  </label>
+                );
+              })}
             </RadioGroup>
             <Button onClick={handleRefresh}>Refresh</Button>
-          </Container>
+          </div>
         </Paper>
       </div>
     </Drawer>

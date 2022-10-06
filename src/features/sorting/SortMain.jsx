@@ -23,7 +23,7 @@ const SortMain = () => {
   const activeSorting = useSelector((state) => state.sorting.activeSorting);
   const dispatch = useDispatch();
   const [isControls, setIsControls] = useState(false);
-  const [chartType, setChartType] = useState('random');
+  const [chartType, setChartType] = useState('Random');
 
   const refreshRandom = () => {
     let arr = [];
@@ -72,16 +72,16 @@ const SortMain = () => {
   const handleRefresh = () => {
     if (sorting) return;
     switch (chartType) {
-      case 'random':
+      case 'Random':
         refreshRandom();
         return;
-      case 'reverse':
+      case 'Reverse':
         refreshReverse();
         return;
-      case 'valley':
+      case 'Valley':
         refreshValley();
         return;
-      case 'pyramid':
+      case 'Pyramid':
         refreshPyramid();
         return;
       default:
