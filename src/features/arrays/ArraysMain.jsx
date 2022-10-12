@@ -39,7 +39,6 @@ export default function ArraysMain() {
   return (
     <>
       <h1>Arrays</h1>
-      <h2>Sums</h2>
       <Paper style={{ maxWidth: '700px' }}>
         <Tabs
           value={value}
