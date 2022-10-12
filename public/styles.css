@@ -12,11 +12,17 @@ body {
   top: 0;
   bottom: 0;
   width: 100%;
+  justify-content:space-between;
 }
 #main {
   width: 100%;
   padding: 0 1rem 1rem 1rem;
   overflow-y: auto
+}
+#footer {
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 5px 15px
 }
 h2 {
   margin: 0;
@@ -27,7 +33,19 @@ h2 {
   box-shadow: 0px -5px 15px
 }
 #homeLink {
-  padding: 1rem;
+  padding: .25rem 0 .25rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+#githubLink {
+  border-radius: 40%;
+  display: flex;
+  align-items: center;
+} 
+#githubLink:hover {
+  box-shadow: 1px 1px 8px #c916c9;
+
 }
 #homeLink a{
   text-decoration: none;
@@ -45,6 +63,13 @@ gap: 1px;
   width: 100%;
   padding: 0 1rem;
 }
+
+@media screen and (max-width: 500px) {
+  #homeLink {
+    display: none;
+  }
+}
+
 .container {
   display: flex;
 }

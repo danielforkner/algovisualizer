@@ -43,6 +43,7 @@ export default function ThreeSum() {
         setArray([...array]);
         await wait(speed / 2);
         for (let k = j + 1; k < array.length; k++) {
+          setCurrentSum(array[i] + array[j] + array[k]);
           setKIdx(k);
           setArray([...array]);
           await wait(speed / 4);
@@ -140,8 +141,14 @@ export default function ThreeSum() {
         target and return them.
       </p>
       <hr />
-      <p>Target Sum: {target}</p>
-      <p>Search Method: {method}</p>
+      <p>
+        <b>Target Sum: </b>
+        {target}
+      </p>
+      <p>
+        <b>Search Method: </b>
+        {method}
+      </p>
       <select
         disabled={searching ? true : false}
         value={method}
@@ -188,9 +195,12 @@ export default function ThreeSum() {
           );
         })}
       </div>
-      <p>{`Current sum: ${currentSum}`}</p>
+      <p>
+        <b>Current sum: </b>
+        {currentSum}
+      </p>
       <div>
-        Triples Found: [
+        <b>Triples Found: </b>[
         {triples.map((element, i) => {
           return (
             <p key={`ThreeSumTriples: ${i}`}>

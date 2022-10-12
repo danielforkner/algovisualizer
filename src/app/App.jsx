@@ -7,6 +7,7 @@ import BinaryTree from '../features/trees/BinaryTree';
 import BinarySearchTree from '../features/trees/BinarySearchTree';
 import ArraysMain from '../features/arrays/ArraysMain';
 import RecursionMain from '../features/recursion/RecursionMain';
+import Footer from './Footer';
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
           />
         </Routes>
       </main>
+      {/* <Footer /> */}
     </div>
   );
 };

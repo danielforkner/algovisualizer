@@ -5,21 +5,31 @@ export default function RecursionMain() {
   const [canvasY, setCanvasY] = useState(500);
 
   const sketch = (s) => {
-    let slider;
+    let sliderAngle;
+    let sliderRight;
+    let sliderLeft;
     let angle = 0;
     s.setup = () => {
       s.createCanvas(canvasX, canvasY);
       s.stroke(255);
-      let label = s.createDiv('Angle');
-      slider = s.createSlider(0.1, s.PI - 0.1, s.PI / 7, 0.01);
-      slider.parent(label);
-      slider.input(() => s.loop());
+      let labelAngle = s.createDiv('Angle');
+      let labelLeft = s.createDiv('Left Length');
+      let labelRigth = s.createDiv('Right Length');
+      sliderAngle = s.createSlider(0.1, s.PI - 0.1, s.PI / 7, 0.01);
+      sliderAngle.parent(labelAngle);
+      sliderAngle.input(() => s.loop());
+      sliderRight = s.createSlider(0.25, 0.83, 0.75, 0.02);
+      sliderRight.parent(labelRigth);
+      sliderRight.input(() => s.loop());
+      sliderLeft = s.createSlider(0.25, 0.83, 0.75, 0.02);
+      sliderLeft.parent(labelLeft);
+      sliderLeft.input(() => s.loop());
     };
 
     s.draw = () => {
       s.background(55);
       console.log(angle);
-      angle = slider.value();
+      angle = sliderAngle.value();
       s.translate(canvasX / 2, canvasY);
       let len = 100;
       drawTree(len);
@@ -28,14 +38,14 @@ export default function RecursionMain() {
     const drawTree = (len) => {
       s.line(0, 0, 0, -len);
       s.translate(0, -len);
-      if (len > 9) {
+      if (len > 6) {
         s.push();
         s.rotate(angle);
-        drawTree(len * 0.8);
+        drawTree(len * sliderRight.value());
         s.pop();
         s.push();
         s.rotate(-angle);
-        drawTree(len * 0.8);
+        drawTree(len * sliderLeft.value());
         s.pop();
       } else {
         s.noLoop();
@@ -53,7 +63,7 @@ export default function RecursionMain() {
 
   return (
     <div>
-      <h1>Hello World</h1>
+      <h1>Fun with Fractals</h1>
       <div className="container">
         <div id="p5-container"></div>
       </div>
