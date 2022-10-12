@@ -1,4 +1,3 @@
-import Drawer from '@mui/material/Drawer';
 import { NavLink } from 'react-router-dom';
 
 export default function Sidebar() {
@@ -31,6 +30,14 @@ export default function Sidebar() {
           }
         >
           Trees
+        </NavLink>
+        <NavLink
+          to="recursion"
+          className={({ isActive }) =>
+            isActive ? 'activeLink' : 'inactiveLink'
+          }
+        >
+          Recursion
         </NavLink>
       </div>
     </div>

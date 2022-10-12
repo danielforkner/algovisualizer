@@ -15,7 +15,7 @@ export default function TwoSum() {
   const [currentSum, setCurrentSum] = useState(0);
   const [possibleMatch, setPossibleMatch] = useState(0);
   const [method, setMethod] = useState('Sort First');
-  const [speed, setSpeed] = useState(500);
+  const [speed, setSpeed] = useState(250);
 
   React.useEffect(() => handleRefresh(), []);
 

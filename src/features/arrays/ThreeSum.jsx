@@ -13,7 +13,7 @@ export default function ThreeSum() {
   const [jIdx, setJIdx] = useState(-1);
   const [kIdx, setKIdx] = useState(-1);
   const [method, setMethod] = useState('Brute Force');
-  const [speed, setSpeed] = useState(250);
+  const [speed, setSpeed] = useState(100);
 
   useEffect(() => handleRefresh(), []);
 

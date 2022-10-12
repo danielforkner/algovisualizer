@@ -36,6 +36,7 @@ h2 {
 }
 #navLinks {
 display: flex;
+gap: 1px;
 }
 #navLinks a {
   display: flex;

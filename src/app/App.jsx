@@ -1,11 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from '../Home';
+import Home from './Home';
 import SortMain from '../features/sorting/SortMain';
-import Sidebar from '../features/Sidebar';
+import Sidebar from './Sidebar';
 import TreesMain from '../features/trees/TreesMain';
 import BinaryTree from '../features/trees/BinaryTree';
 import BinarySearchTree from '../features/trees/BinarySearchTree';
 import ArraysMain from '../features/arrays/ArraysMain';
+import RecursionMain from '../features/recursion/RecursionMain';
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             />
           </Route>
           <Route path="arrays" element={<ArraysMain />} />
+          <Route path="recursion" element={<RecursionMain />} />
           <Route
             path="*"
             element={
