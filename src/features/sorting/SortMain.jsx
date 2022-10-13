@@ -107,7 +107,7 @@ const SortMain = () => {
   }, [activeSorting]);
 
   return (
-    <>
+    <div className="main-content">
       <SortSettings
         active={active}
         isControls={isControls}
@@ -178,7 +178,7 @@ const SortMain = () => {
             })
           : null}
       </div>
-    </>
+    </div>
   );
 };
 

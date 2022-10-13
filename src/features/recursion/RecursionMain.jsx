@@ -1,16 +1,20 @@
 import p5 from 'p5';
 import { useEffect, useState } from 'react';
+import useWindowSize from '../../hooks/windowSize';
+
 export default function RecursionMain() {
-  const [canvasX, setCanvasX] = useState(750);
-  const [canvasY, setCanvasY] = useState(500);
+  const { w, h } = useWindowSize();
+  const heightMod = 0.75;
+  console.log(w, h);
 
   const sketch = (s) => {
     let sliderAngle;
     let sliderRight;
     let sliderLeft;
     let angle = 0;
+
     s.setup = () => {
-      s.createCanvas(canvasX, canvasY);
+      s.createCanvas(w, h * heightMod);
       s.stroke(255);
       let labelAngle = s.createDiv('Angle');
       let labelLeft = s.createDiv('Left Length');
@@ -28,11 +32,16 @@ export default function RecursionMain() {
 
     s.draw = () => {
       s.background(55);
-      console.log(angle);
+      console.log('angle: ', angle);
       angle = sliderAngle.value();
-      s.translate(canvasX / 2, canvasY);
+      s.translate(w / 2, h * heightMod);
       let len = 100;
       drawTree(len);
+    };
+
+    s.windowResized = () => {
+      s.resizeCanvas(w, h * heightMod);
+      s.redraw();
     };
 
     const drawTree = (len) => {
@@ -63,7 +72,6 @@ export default function RecursionMain() {
 
   return (
     <div>
-      <h1>Fun with Fractals</h1>
       <div className="container">
         <div id="p5-container"></div>
       </div>
