@@ -37,7 +37,7 @@ export default function ArraysMain() {
   };
 
   return (
-    <>
+    <div className="main-content">
       <h1>Arrays</h1>
       <Paper style={{ maxWidth: '700px' }}>
         <Tabs
@@ -55,6 +55,6 @@ export default function ArraysMain() {
           <ThreeSum />
         </SumPanel>
       </Paper>
-    </>
+    </div>
   );
 }

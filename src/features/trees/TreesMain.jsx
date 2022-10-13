@@ -1,9 +1,9 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import './styles/styles.css';
 
 export default function TreesMain() {
   return (
-    <>
+    <div className="main-content">
       <h1>Tree Traversal</h1>
       <div className="links">
         {/* <NavLink
@@ -27,6 +27,6 @@ export default function TreesMain() {
       <div>Method of traversal: {`[Depth-first]`}</div> */}
 
       <Outlet />
-    </>
+    </div>
   );
 }
