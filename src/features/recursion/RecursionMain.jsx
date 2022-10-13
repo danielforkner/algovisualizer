@@ -5,7 +5,6 @@ import useWindowSize from '../../hooks/windowSize';
 export default function RecursionMain() {
   const { w, h } = useWindowSize();
   const heightMod = 0.75;
-  console.log(w, h);
 
   const sketch = (s) => {
     let sliderAngle;
@@ -22,7 +21,7 @@ export default function RecursionMain() {
       sliderAngle = s.createSlider(0.1, s.PI - 0.1, s.PI / 7, 0.01);
       sliderAngle.parent(labelAngle);
       sliderAngle.input(() => s.loop());
-      sliderRight = s.createSlider(0.25, 0.83, 0.75, 0.02);
+      sliderRight = s.createSlider(0.25, 0.83, 0.83, 0.02);
       sliderRight.parent(labelRigth);
       sliderRight.input(() => s.loop());
       sliderLeft = s.createSlider(0.25, 0.83, 0.75, 0.02);
